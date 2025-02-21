@@ -1,4 +1,3 @@
-import { SignedOut, SignInButton } from "@clerk/nextjs";
 import Navbar from "@/components/navbar";
 
 export default function Home() {

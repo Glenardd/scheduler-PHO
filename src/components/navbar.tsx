@@ -1,5 +1,6 @@
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs"; 
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 export default function navbar() {
   return (
@@ -10,10 +11,19 @@ export default function navbar() {
         </div>
         <div className="flex items-center flex-shrink-0 text-black mr-6">
             <SignedIn>
-                <UserButton />
+                <UserButton appearance={{
+                    elements: {
+                        avatarBox:{
+                            width: 40,
+                            height: 40
+                        },
+                    }}
+                }/>
             </SignedIn>
             <SignedOut>
-                <SignInButton />
+                <SignInButton>
+                    <Button>Sign In</Button>
+                </SignInButton>
             </SignedOut>
         </div>
     </nav>
