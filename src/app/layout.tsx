@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from '@clerk/nextjs'
-import { AppSidebar } from "@/components/app-sidebar";
+import DisableSidebar from "@/components/disableSidebar";
 import SidebarProvider from "@/components/sidebarProvider";
 import "./globals.css";
 
@@ -30,7 +30,7 @@ export default function RootLayout({
       <ClerkProvider>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <SidebarProvider>
-          <AppSidebar />
+            <DisableSidebar/>
             <main className="w-full">
               {children}
             </main>
