@@ -21,16 +21,18 @@ export default function navbar() {
                 <Image src="/PGP.png" width={50} height={50} alt="PGP-Logo" />
             </div>
             <div className="flex items-center flex-shrink-0 text-black mr-6">
-                <SignedIn>
-                    <UserButton appearance={{
-                        elements: {
-                            avatarBox: {
-                                width: 40,
-                                height: 40
-                            },
-                        }
-                    }} />
-                </SignedIn>
+                <div className="hidden md:block">
+                    <SignedIn>
+                        <UserButton appearance={{
+                            elements: {
+                                avatarBox: {
+                                    width: 40,
+                                    height: 40
+                                },
+                            }
+                        }} />
+                    </SignedIn>
+                </div>
                 <div className="hidden md:block">
                     <SignedOut>
                         <SignInButton>

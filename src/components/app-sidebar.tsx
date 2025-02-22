@@ -1,14 +1,16 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import NavUser from "./navUser";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarHeader
 } from "@/components/ui/sidebar"
 
 // Menu items.
@@ -43,9 +45,11 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="sidebar">
+      <SidebarHeader>
+        <NavUser />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Provinceial Health Office Scheduler</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -62,6 +66,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        {/* <p><span className="text-sm">Provinceial Health Office Scheduler</span></p> */}
+      </SidebarFooter>
     </Sidebar>
   )
 }
