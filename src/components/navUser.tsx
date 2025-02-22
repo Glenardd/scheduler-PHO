@@ -9,7 +9,9 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     useSidebar,
-  } from "@/components/ui/sidebar"
+  } from "@/components/ui/sidebar";
+
+import { SignedIn } from "@clerk/nextjs";
 
 import { useUser } from "@clerk/nextjs";
 
@@ -23,10 +25,13 @@ export default function navUser() {
         <div className="block md:hidden">
         <SidebarMenu>
             <SidebarMenuItem>
-                <Avatar className="h-14 w-14 rounded-xl">
-                    <AvatarImage src={userimage} alt={username}/>
-                    <AvatarFallback className="rounded-lg">{username}</AvatarFallback>
-                </Avatar>
+                {/* show image when user is signed in */}
+                <SignedIn>
+                    <Avatar className="h-14 w-14 rounded-xl">
+                        <AvatarImage src={userimage} alt={username}/>
+                        <AvatarFallback className="rounded-lg">{username}</AvatarFallback>
+                    </Avatar>
+                </SignedIn>
             </SidebarMenuItem>
         </SidebarMenu>
         </div>
