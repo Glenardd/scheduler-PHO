@@ -27,10 +27,13 @@ export default function navUser() {
             <SidebarMenuItem>
                 {/* show image when user is signed in */}
                 <SignedIn>
-                    <Avatar className="h-14 w-14 rounded-xl">
-                        <AvatarImage src={userimage} alt={username}/>
-                        <AvatarFallback className="rounded-lg">{username}</AvatarFallback>
-                    </Avatar>
+                    <div className="flex items-center gap-3 p-4">
+                        <Avatar className="h-14 w-14 rounded-full">
+                            <AvatarImage src={userimage} alt={username}/>
+                            <AvatarFallback className="rounded-lg">{username}</AvatarFallback>
+                        </Avatar>
+                        <span className="truncate font-semibold">{username}</span>
+                    </div>
                 </SignedIn>
             </SidebarMenuItem>
         </SidebarMenu>

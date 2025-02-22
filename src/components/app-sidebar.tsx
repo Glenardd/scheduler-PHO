@@ -1,5 +1,5 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-import NavUser from "./navUser";
+import User from "./user";
 
 import {
   Sidebar,
@@ -46,7 +46,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="sidebar">
       <SidebarHeader>
-        <NavUser />
+        <User />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
