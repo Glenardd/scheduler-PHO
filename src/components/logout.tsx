@@ -10,15 +10,17 @@ import { SignedIn } from "@clerk/nextjs";
 export default function logout() {
   return (
     <div className="block md:hidden">
-        <SignedIn>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <SignOutButton>
-                        <Button>Sign Out</Button>
-                    </SignOutButton>
-                </SidebarMenuItem>
-            </SidebarMenu>
-        </SignedIn>
+        <div className="p-2 grid justify-self-end">
+            <SignedIn>
+                <SidebarMenu> 
+                    <SidebarMenuItem>
+                        <SignOutButton>
+                            <Button>Sign Out</Button>
+                        </SignOutButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SignedIn>
+        </div>
     </div>
   );
 };
