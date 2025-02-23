@@ -5,7 +5,15 @@ import { SidebarTrigger } from "./ui/sidebar";
 
 export default function navbar() {
     return (
-        <nav className="flex items-center justify-between flex-wrap bg-white p-4 shadow-md">
+        <nav className="
+            flex
+            items-center 
+            justify-between 
+            flex-wrap 
+            bg-white 
+            p-4 
+            shadow-md
+        ">
             <SidebarTrigger/>
             <div className="
                 flex 

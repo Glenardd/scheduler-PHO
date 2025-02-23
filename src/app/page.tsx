@@ -1,11 +1,10 @@
-import Navbar from "@/components/navbar";
-
-export default function Home() {
+export default function Page() {
   return (
     <>
       <div>
-        <Navbar />
-        <div className="m-8">Dashboard</div>
+        <div className="m-4">
+          dashboard
+        </div>  
       </div>
     </>
   );
