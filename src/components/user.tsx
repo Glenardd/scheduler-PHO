@@ -7,7 +7,7 @@ import {
 import {
     SidebarMenu,
     SidebarMenuItem,
-  } from "@/components/ui/sidebar";
+} from "@/components/ui/sidebar";
 
 import { SignedIn } from "@clerk/nextjs";
 
@@ -21,20 +21,20 @@ export default function navUser() {
 
     return (
         <div className="block md:hidden">
-        <SidebarMenu>
-            <SidebarMenuItem>
-                {/* show image when user is signed in */}
-                <SignedIn>
-                    <div className="flex items-center gap-3 p-4">
-                        <Avatar className="h-14 w-14 rounded-full">
-                            <AvatarImage src={userimage} alt={username}/>
-                            <AvatarFallback className="rounded-lg">{username}</AvatarFallback>
-                        </Avatar>
-                        <span className="truncate font-semibold">{username}</span>
-                    </div>
-                </SignedIn>
-            </SidebarMenuItem>
-        </SidebarMenu>
+            <SignedIn>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        {/* show image when user is signed in */}
+                        <div className="flex items-center gap-3 p-4">
+                            <Avatar className="h-14 w-14 rounded-full">
+                                <AvatarImage src={userimage} alt={username} />
+                                <AvatarFallback className="rounded-lg">{username}</AvatarFallback>
+                            </Avatar>
+                            <span className="truncate font-semibold">{username}</span>
+                        </div>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SignedIn>
         </div>
     );
 };

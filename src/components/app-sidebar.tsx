@@ -1,5 +1,6 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 import User from "./user";
+import Logout from "./logout";
 
 import {
   Sidebar,
@@ -67,7 +68,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {/* <p><span className="text-sm">Provinceial Health Office Scheduler</span></p> */}
+        <Logout />
       </SidebarFooter>
     </Sidebar>
   )
