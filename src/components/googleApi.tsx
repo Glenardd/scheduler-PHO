@@ -12,7 +12,7 @@ export default function googleApi() {
 
   const event = data?.events?.items;
 
-  // console.log(data?.events?.items);
+  console.log(data?.events?.items);
   
   return (
     <div>
@@ -23,7 +23,8 @@ export default function googleApi() {
             <ul key={i}>
               <li>
                 <b>{event?.summary}</b>
-                {event?.description}
+                <span>{event?.description}</span>
+                <span>{event?.hangoutLink}</span>
               </li>
             </ul>
           )
