@@ -5,7 +5,6 @@ import { google } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest,res: NextApiResponse) {
-    
     //userid
     const userID = await getAuth(req).userId;
 
@@ -21,11 +20,12 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     googleClient.setCredentials({access_token: token[0].token})
 
     //place the auth in the calendar
-    const calendar = google.calendar("v3").events.list({
+    const events = google.calendar("v3").events.list({
         calendarId: "primary",
         eventTypes: ["default"],
         auth: googleClient,
-    })
+        singleEvents: true,
+    });
 
-    return res.json({message: (await calendar).data});
-}
+    return res.json({ events: (await events).data });
+};
