@@ -1,8 +1,11 @@
+import GoogleApi from "@/components/googleApi"
+
 export default function Page() {
   return (
     <>
       <div>
-          dashboard
+          Events
+          <GoogleApi />
       </div>
     </>
   );

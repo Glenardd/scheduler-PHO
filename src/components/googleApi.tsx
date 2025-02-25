@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+
 import { useEffect, useState } from "react";
 
 export default function googleApi() {
@@ -13,23 +23,44 @@ export default function googleApi() {
   const event = data?.events?.items;
 
   console.log(data?.events?.items);
+
+  // event?.map((data:any)=> console.log(data?.organizer?.displayName))
   
   return (
-    <div>
-      <h1>Calendar</h1>
+    <>
       {
         event?.map((event: any, i: number)=>{
           return (
-            <ul key={i}>
-              <li>
-                <b>{event?.summary}</b>
-                <span>{event?.description}</span>
-                <span>{event?.hangoutLink}</span>
-              </li>
-            </ul>
+            <div key={i}>
+              <Card>
+                <div className="flex items-center justify justify-between">
+                    <div>
+                      <CardHeader>
+                        <CardTitle>{event?.summary}</CardTitle>
+                        <CardDescription>
+                          <span>by {event?.organizer?.displayName}<br/>{event?.organizer?.email}</span>
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <span>{event?.description}</span>
+                      </CardContent>
+                    </div>
+                    <div className="p-5 gap-4">
+                      <CardContent>
+                        <div className="items-center">
+                          {event?.start?.dateTime}
+                        </div>
+                        <div className="items-center">
+                          {event?.start?.timeZone}
+                        </div> 
+                      </CardContent>
+                    </div>
+                </div>
+              </Card>
+            </div>
           )
-        })
+        }).reverse()
       }
-    </div>
+    </>
   );
 }
