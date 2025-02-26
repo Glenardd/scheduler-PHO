@@ -37,7 +37,7 @@ export default function RootLayout({
             <DisableSidebar/>
             <main className="w-full">
               <DisableNavbar />
-              <div className="m-4">
+              <div className="m-8">
                 {children}
               </div>
             </main>
