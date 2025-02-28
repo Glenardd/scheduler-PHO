@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     //check if userId is not found
     if (!userID) {
         return res.status(400).json({ message: "User ID not found" });
-    }
+    };
 
     //get the token of the userid using the google provider auth
     const token = (await (await clerkClient()).users.getUserOauthAccessToken(userID, "google")).data

@@ -7,5 +7,5 @@ export default function disableNavbar() {
   
     const pathname = usePathname();
     
-    return <div>{!paths.includes(pathname) && <Navbar />}</div>;
+    return <div>{!paths.includes(pathname!!) && <Navbar />}</div>;
 }

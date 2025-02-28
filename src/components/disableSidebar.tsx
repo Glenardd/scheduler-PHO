@@ -8,5 +8,5 @@ export default function DisableSidebar() {
 
     const pathname = usePathname();
     
-    return <div>{!paths.includes(pathname) && <AppSidebar />}</div>;
+    return <div>{!paths.includes(pathname!!) && <AppSidebar />}</div>;
 }

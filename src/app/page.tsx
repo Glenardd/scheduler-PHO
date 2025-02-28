@@ -1,10 +1,9 @@
-import GoogleApi from "@/components/googleApi"
+import GoogleApi from "@/components/googleCalendar"
 
 export default function Page() {
   return (
     <>
       <div>
-          Events
           <GoogleApi />
       </div>
     </>

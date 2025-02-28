@@ -6,6 +6,7 @@ import { SidebarTrigger } from "./ui/sidebar";
 export default function navbar() {
     return (
         <nav className="
+            w-full
             flex
             items-center 
             justify-between 
