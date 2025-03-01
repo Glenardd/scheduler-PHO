@@ -19,13 +19,28 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     //set the cridentials 
     googleClient.setCredentials({access_token: token[0].token})
 
-    //place the auth in the calendar
-    const events = google.calendar("v3").events.list({
-        calendarId: "primary",
-        eventTypes: ["default"],
-        auth: googleClient,
-        singleEvents: true,
-    });
+    if(req.method === "GET"){
+        const events = await google.calendar("v3").events.list({
+            calendarId: "primary",
+            auth: googleClient,
+            singleEvents: true,
+            eventTypes: ["default"],
+        });
 
-    return res.json({ events: (await events).data });
+        return res.json({ calendar: (await events).data });
+    };
+
+    if(req.method === "DELETE"){
+        const { eventId } = req.query;
+
+        if (!eventId || typeof eventId !== "string") {
+            return res.status(400).json({ message: "Missing or invalid eventId" });
+        };
+
+        await google.calendar("v3").events.delete({
+            calendarId: "primary",
+            eventId,
+            auth: googleClient,
+        });
+    };
 };

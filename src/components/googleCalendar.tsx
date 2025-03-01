@@ -15,29 +15,35 @@ import DeleteButton from "./deleteButton";
 
 export default function googleApi() {
 
-  const [data, setData] = useState<{ events?: any }>();
+  const [data, setData] = useState<{ calendar?: any }>();
 
   useEffect(() => {
-    fetch("/api/google").then((res) => res.json()).then((data) => setData(data));
+    fetch("/api/google", {method: "GET"}).then((res) => res.json()).then((data) => setData(data));
   }, []);
 
-  const event = data?.events?.items;
+  const event = data?.calendar?.items;
 
-  //short time format
+  const isValidDate = (date: any) => {
+    return !isNaN(Date.parse(date));
+  };
+
+  // short time format
   const timeFormat = (time: any) => {
+    if (!isValidDate(time)) return "Invalid time";
     const timeShort = new Date(time);
     const shortTime = new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(timeShort);
     return shortTime;
   };
 
-  //dateFormat
+  // date format
   const dateFormat = (time: any) => {
+    if (!isValidDate(time)) return "Invalid date";
     const timeShort = new Date(time);
     const shortTime = new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(timeShort);
     return shortTime;
   };
 
-  console.log(data?.events?.items);
+  console.log(data?.calendar?.items);
 
   // event?.map((data:any)=> console.log(data?.organizer?.displayName))
 
@@ -46,6 +52,9 @@ export default function googleApi() {
       <div className="grid grid-cols-2 gap-4 place-items-center m-6">
       {
         event?.map((event: any, i: number) => {
+          
+          const eventId =  event?.id;
+
           return (
             <Card key={i} className="w-full md:w-[650px]">
               {/* header */}
@@ -68,7 +77,7 @@ export default function googleApi() {
                   <span>Meeting created by: {event?.organizer?.displayName || "unkown"}</span>
                   {/* <span>{event?.organizer?.email}</span> */}
                 </CardDescription>
-                <DeleteButton />
+                <DeleteButton eventId={eventId}/>
               </CardFooter>
             </Card>
           )
