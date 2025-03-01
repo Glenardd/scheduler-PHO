@@ -11,7 +11,7 @@ import {
 
 import { SignedIn } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
+import DeleteButton from "./deleteButton";
 
 export default function googleApi() {
 
@@ -68,9 +68,7 @@ export default function googleApi() {
                   <span>Meeting created by: {event?.organizer?.displayName || "unkown"}</span>
                   {/* <span>{event?.organizer?.email}</span> */}
                 </CardDescription>
-                <Button>
-                  Delete
-                </Button>
+                <DeleteButton />
               </CardFooter>
             </Card>
           )
