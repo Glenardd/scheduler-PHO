@@ -1,15 +1,8 @@
 "use client";
 import { Button } from "./ui/button"
 
-export default function deleteButton({eventId}:any) {
-
-    const handleDelete = async () => {
-        await fetch(`/api/google?eventId=${eventId}`,{
-            method:"DELETE",
-        });
-    };
-
+export default function deleteButton({eventId, onDelete}:any) {
     return (
-        <Button onClick={handleDelete}>Delete</Button>
+        <Button onClick={() => onDelete(eventId)}>Delete</Button>
     );
 };

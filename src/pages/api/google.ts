@@ -42,5 +42,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
             eventId,
             auth: googleClient,
         });
+
+        return res.status(200).json({ message: "success" });
     };
 };

@@ -15,13 +15,40 @@ import DeleteButton from "./deleteButton";
 
 export default function googleApi() {
 
-  const [data, setData] = useState<{ calendar?: any }>();
-
-  useEffect(() => {
-    fetch("/api/google", {method: "GET"}).then((res) => res.json()).then((data) => setData(data));
-  }, []);
+  const [data, setData] = useState<{ [calendar: string]: any }>([]);
 
   const event = data?.calendar?.items;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/google", { method: "GET" });
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+  }, []);
+
+  const handleDelete = async (eventId: any) => {
+    const response = await fetch(`/api/google?eventId=${eventId}`, {
+      method: "DELETE",
+    });
+    
+    if (response.ok) {
+      setData((prevData: any) => ({
+        ...prevData,
+        calendar: {
+          ...prevData.calendar,
+          items: prevData.calendar.items.filter((item: any) => item.id !== eventId), // Remove the deleted event
+        },
+      }));
+    };
+  };  
 
   const isValidDate = (date: any) => {
     return !isNaN(Date.parse(date));
@@ -43,7 +70,7 @@ export default function googleApi() {
     return shortTime;
   };
 
-  console.log(data?.calendar?.items);
+  // console.log(data?.calendar?.items);
 
   // event?.map((data:any)=> console.log(data?.organizer?.displayName))
 
@@ -77,7 +104,7 @@ export default function googleApi() {
                   <span>Meeting created by: {event?.organizer?.displayName || "unkown"}</span>
                   {/* <span>{event?.organizer?.email}</span> */}
                 </CardDescription>
-                <DeleteButton eventId={eventId}/>
+                <DeleteButton eventId={eventId} onDelete={handleDelete}/>
               </CardFooter>
             </Card>
           )
