@@ -9,45 +9,25 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+import useSWR, { useSWRConfig } from "swr"
+
 import { SignedIn } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
 import DeleteButton from "./deleteButton";
 
 export default function googleApi() {
 
-  const [data, setData] = useState<{ [calendar: string]: any }>([]);
+  const {mutate} = useSWRConfig();
+
+  const {data} = useSWR("/api/google", (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()))
 
   const event = data?.calendar?.items;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/google", { method: "GET" });
-        const data = await response.json();
-        setData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-
-  }, []);
-
   const handleDelete = async (eventId: any) => {
-    const response = await fetch(`/api/google?eventId=${eventId}`, {
+    await fetch(`/api/google?eventId=${eventId}`, {
       method: "DELETE",
     });
-    
-    if (response.ok) {
-      setData((prevData: any) => ({
-        ...prevData,
-        calendar: {
-          ...prevData.calendar,
-          items: prevData.calendar.items.filter((item: any) => item.id !== eventId), // Remove the deleted event
-        },
-      }));
-    };
+
+    mutate("/api/google");
   };  
 
   const isValidDate = (date: any) => {
