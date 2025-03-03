@@ -12,7 +12,9 @@ import {
 import useSWR, { useSWRConfig } from "swr"
 
 import { SignedIn } from "@clerk/nextjs";
+
 import DeleteButton from "./deleteButton";
+import EditButton from "./editButton";
 
 export default function googleApi() {
 
@@ -79,12 +81,15 @@ export default function googleApi() {
                 </CardContent>
               </div>
               {/* footer */}
-              <CardFooter className="flex justify-between">
+              <CardFooter className="flex items-center justify-between">
                 <CardDescription>
-                  <span>Meeting created by: {event?.organizer?.displayName || "unkown"}</span>
+                  <span>Meeting created by: {event?.organizer?.displayName || "unknown"}</span>
                   {/* <span>{event?.organizer?.email}</span> */}
                 </CardDescription>
-                <DeleteButton eventId={eventId} onDelete={handleDelete}/>
+                <div className="flex gap-2">
+                  <DeleteButton eventId={eventId} onDelete={handleDelete}/>
+                  <EditButton />
+                </div>
               </CardFooter>
             </Card>
           )
