@@ -18,7 +18,7 @@ export default function googleApi() {
 
   const {mutate} = useSWRConfig();
 
-  const {data} = useSWR("/api/google", (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()))
+  const {data} = useSWR("/api/google", (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
 
   const event = data?.calendar?.items;
 
@@ -35,12 +35,12 @@ export default function googleApi() {
   };
 
   // short time format
-  const timeFormat = (time: any) => {
-    if (!isValidDate(time)) return "Invalid time";
-    const timeShort = new Date(time);
-    const shortTime = new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(timeShort);
-    return shortTime;
-  };
+  // const timeFormat = (time: any) => {
+  //   if (!isValidDate(time)) return "Invalid time";
+  //   const timeShort = new Date(time);
+  //   const shortTime = new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(timeShort);
+  //   return shortTime;
+  // };
 
   // date format
   const dateFormat = (time: any) => {
@@ -75,7 +75,7 @@ export default function googleApi() {
                   {/* date */}
                   <span className="font-semibold text-md md:text-xl">{dateFormat(event?.end?.dateTime)}</span>
                   {/* time */}
-                  <span className="font-semibold text-md md:text-xl">{timeFormat(event?.start?.dateTime)}-{timeFormat(event?.end?.dateTime)}</span>
+                  {/* <span className="font-semibold text-md md:text-xl">{timeFormat(event?.start?.dateTime)}-{timeFormat(event?.end?.dateTime)}</span> */}
                 </CardContent>
               </div>
               {/* footer */}
