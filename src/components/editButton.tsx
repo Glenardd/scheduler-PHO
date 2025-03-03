@@ -1,13 +1,11 @@
-import React from 'react'
 import { Button } from './ui/button'
-
-export default function editButton() {
-    
-    const handleEdit = () =>{
-        console.log("edit button");
-    };
-
-    return (
-    <Button onClick={handleEdit}>Edit</Button>
+import Link from 'next/link';
+export default function editButton({ href }: any) {
+  return (
+    <>
+      <Button asChild>
+        <Link href={href}>Edit</Link>
+      </Button>
+    </>
   );
 };

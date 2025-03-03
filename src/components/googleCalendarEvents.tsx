@@ -31,7 +31,7 @@ export default function googleApi() {
 
     mutate("/api/google");
   };  
-
+  
   const isValidDate = (date: any) => {
     return !isNaN(Date.parse(date));
   };
@@ -88,13 +88,13 @@ export default function googleApi() {
                 </CardDescription>
                 <div className="flex gap-2">
                   <DeleteButton eventId={eventId} onDelete={handleDelete}/>
-                  <EditButton />
+                  <EditButton href={`/edit/${eventId}`}/>
                 </div>
               </CardFooter>
             </Card>
           )
         }).reverse()
-      }
+      };
       </div>
     </SignedIn>
   );

@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     const token = (await (await clerkClient()).users.getUserOauthAccessToken(userID, "google")).data
 
     //set the cridentials 
-    googleClient.setCredentials({access_token: token[0].token})
+    googleClient.setCredentials({access_token: token[0].token});
 
     if(req.method === "GET"){
         const events = await google.calendar("v3").events.list({
