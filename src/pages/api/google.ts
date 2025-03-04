@@ -20,14 +20,30 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     googleClient.setCredentials({access_token: token[0].token});
 
     if(req.method === "GET"){
-        const events = await google.calendar("v3").events.list({
-            calendarId: "primary",
-            auth: googleClient,
-            singleEvents: true,
-            eventTypes: ["default"],
-        });
+        const {id} = req.query;
 
-        return res.json({ calendar: (await events).data });
+        if(id){
+            if (typeof id === "string") {
+                const response = await google.calendar("v3").events.get({
+                    calendarId: "primary",
+                    eventId: id,
+                    auth: googleClient,
+                });
+
+                return res.json({ calendar: response.data });
+            } else {
+                return res.status(400).json({ message: "Invalid event ID" });
+            }
+        }else{
+            const response = await google.calendar("v3").events.list({
+                calendarId: "primary",
+                auth: googleClient,
+                singleEvents: true,
+                eventTypes: ["default"],
+            });
+    
+            return res.json({ calendar: (await response).data });
+        };
     };
 
     if(req.method === "DELETE"){

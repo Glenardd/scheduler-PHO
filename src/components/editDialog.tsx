@@ -1,5 +1,4 @@
 import { Button } from './ui/button';
-import Link from 'next/link';
 
 import {
   Dialog,
@@ -12,11 +11,20 @@ import {
   DialogClose
 } from "@/components/ui/dialog";
 
-export default function editButton() {
+import useSWR from "swr";
+
+export default function editButton({eventId}:any) {
+
+  const {data} = useSWR(`/api/google?id=${eventId}`, (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
+
+  const handleEdit = () =>{
+    console.log(data?.calendar);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Edit</Button>
+        <Button onClick={handleEdit}>Edit</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -26,7 +34,7 @@ export default function editButton() {
           </DialogDescription>
         </DialogHeader>
         <div>
-          Hello this is a pop up
+          {eventId}
         </div>
         <DialogFooter>
           <DialogClose asChild>

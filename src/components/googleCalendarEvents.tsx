@@ -88,7 +88,7 @@ export default function googleApi() {
                 </CardDescription>
                 <div className="flex gap-2">
                   <DeleteButton eventId={eventId} onDelete={handleDelete}/>
-                  <EditDialog />
+                  <EditDialog eventId={eventId}/>
                 </div>
               </CardFooter>
             </Card>
