@@ -94,7 +94,7 @@ export default function googleApi() {
             </Card>
           )
         }).reverse()
-      };
+      }
       </div>
     </SignedIn>
   );

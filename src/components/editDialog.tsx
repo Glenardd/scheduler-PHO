@@ -11,13 +11,29 @@ import {
   DialogClose
 } from "@/components/ui/dialog";
 
+import { Input } from "@/components/ui/input";
+import { useEffect, useState } from 'react';
+
 import useSWR from "swr";
 
 export default function editButton({eventId}:any) {
 
   const {data} = useSWR(`/api/google?id=${eventId}`, (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
 
+  const calendar = data?.calendar;
+  const title = calendar?.summary;
+  const description = calendar?.description;
+
+  const [inputTitle, setInputTitle] = useState(title);
+  const [inputDesc, setInputDesc] = useState(description); 
+
+  //whenever this is clicked it will revert the input values to original
   const handleEdit = () =>{
+    setInputTitle(title);
+    setInputDesc(description);
+  };
+
+  const handleSubmit = () =>{
     console.log(data?.calendar);
   };
 
@@ -33,8 +49,9 @@ export default function editButton({eventId}:any) {
             Make changes to your event here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-        <div>
-          {eventId}
+        <div className='flex flex-col gap-4'>
+          <Input type='text' value={inputTitle} onChange={(e) =>setInputTitle(e.target.value)} placeholder='title'/>
+          <Input type='text' value={inputDesc} onChange={(e) =>setInputDesc(e.target.value)} placeholder='description'/>
         </div>
         <DialogFooter>
           <DialogClose asChild>
