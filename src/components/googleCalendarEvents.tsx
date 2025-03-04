@@ -7,14 +7,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 import useSWR, { useSWRConfig } from "swr"
 
 import { SignedIn } from "@clerk/nextjs";
 
 import DeleteButton from "./deleteButton";
-import EditButton from "./editButton";
+import EditDialog from "./editDialog";
 
 export default function googleApi() {
 
@@ -88,7 +88,7 @@ export default function googleApi() {
                 </CardDescription>
                 <div className="flex gap-2">
                   <DeleteButton eventId={eventId} onDelete={handleDelete}/>
-                  <EditButton href={`/edit/${eventId}`}/>
+                  <EditDialog />
                 </div>
               </CardFooter>
             </Card>
