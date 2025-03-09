@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     };
 
     //get the token of the userid using the google provider auth
-    const token = (await (await clerkClient()).users.getUserOauthAccessToken(userID, "google")).data
+    const token = (await (await clerkClient()).users.getUserOauthAccessToken(userID, "google")).data;
 
     //set the cridentials 
     googleClient.setCredentials({access_token: token[0].token});

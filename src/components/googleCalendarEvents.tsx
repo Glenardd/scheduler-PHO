@@ -1,13 +1,24 @@
 "use client";
 
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardFooter,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
 
 import useSWR from "swr"
 
@@ -40,42 +51,31 @@ export default function googleApi() {
 
   return (
     <SignedIn>
-      <div className="grid grid-cols-2 gap-4 place-items-center m-6">
+      <div>
       {
-        event?.map((event: any, i: number) => {
-          
-          const eventId =  event?.id;
-
-          return (
-            <Card key={i} className="w-full md:w-[650px]">
-              {/* header */}
-              <div className="flex items-center justify-between flex-shrink-0">
-                <CardHeader>
-                  <CardTitle className="max-w-15 break-words">{event?.summary}</CardTitle>
-                  <span>{event?.description}</span>
-                </CardHeader>
-                {/* content */}
-                <CardContent className="flex flex-col p-5">
-                  {/* date */}
-                  <span className="font-semibold text-md md:text-xl">{dateFormat(event?.end?.dateTime)}</span>
-                  {/* time */}
-                  {/* <span className="font-semibold text-md md:text-xl">{timeFormat(event?.start?.dateTime)}-{timeFormat(event?.end?.dateTime)}</span> */}
-                </CardContent>
-              </div>
-              {/* footer */}
-              <CardFooter className="flex items-center justify-between">
-                <CardDescription>
-                  <span>Meeting created by: {event?.organizer?.displayName || "unknown"}</span>
-                  {/* <span>{event?.organizer?.email}</span> */}
-                </CardDescription>
-                <div className="flex gap-2">
-                  <DeleteButton eventId={eventId}/>
-                  <EditButton eventId={eventId}/>
-                </div>
-              </CardFooter>
-            </Card>
-          )
-        }).reverse()
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Health Celebrations</TableHead>
+              <TableHead>DAY/DATE</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {
+              event?.map((event: any) => {
+                const eventId = event?.id;
+                return (
+                  <TableRow key={eventId}>
+                    <TableCell>{event?.summary}</TableCell>
+                    <TableCell>{dateFormat(event?.end?.dateTime)}</TableCell>
+                    <TableCell><DeleteButton eventId={eventId} /></TableCell>
+                    <TableCell><EditButton eventId={eventId} /></TableCell>
+                  </TableRow>
+                )
+              }).reverse()
+            }
+          </TableBody>
+        </Table>
       }
       </div>
     </SignedIn>
