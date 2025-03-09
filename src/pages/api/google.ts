@@ -19,21 +19,22 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     //set the cridentials 
     googleClient.setCredentials({access_token: token[0].token});
 
+    const {id} = req.query;
+
     if(req.method === "GET"){
-        const {id} = req.query;
-
         if(id){
-            if (typeof id === "string") {
-                const response = await google.calendar("v3").events.get({
-                    calendarId: "primary",
-                    eventId: id,
-                    auth: googleClient,
-                });
+            if (!id || typeof id !== "string") {
+                return res.status(400).json({ message: "Missing or invalid eventId" });
+            };
 
-                return res.json({ calendar: response.data });
-            } else {
-                return res.status(400).json({ message: "Invalid event ID" });
-            }
+            const response = await google.calendar("v3").events.get({
+                calendarId: "primary",
+                eventId: id,
+                auth: googleClient,
+            });
+
+            return res.json({ calendar: response.data });
+
         }else{
             const response = await google.calendar("v3").events.list({
                 calendarId: "primary",
@@ -47,18 +48,34 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     };
 
     if(req.method === "DELETE"){
-        const { eventId } = req.query;
-
-        if (!eventId || typeof eventId !== "string") {
+        if (!id || typeof id !== "string") {
             return res.status(400).json({ message: "Missing or invalid eventId" });
         };
 
         await google.calendar("v3").events.delete({
             calendarId: "primary",
-            eventId,
+            eventId: id,
             auth: googleClient,
         });
 
         return res.status(200).json({ message: "success" });
+    };
+
+    if(req.method === "PATCH") {
+        if (!id || typeof id !== "string") {
+            return res.status(400).json({ message: "Missing or invalid eventId" });
+        };
+
+        //this will return the json of description and title and other information
+        const event = req.body;
+
+        await google.calendar("v3").events.patch({
+            calendarId: "primary",
+            eventId: id,
+            auth: googleClient,
+            requestBody: event,
+        });
+
+        return res.status(200).json({ message: "Event updated successfully", changes: event });
     };
 };

@@ -12,29 +12,53 @@ import {
 } from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 export default function editButton({eventId}:any) {
+
+  const {mutate} = useSWRConfig();
 
   const {data} = useSWR(`/api/google?id=${eventId}`, (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
 
   const calendar = data?.calendar;
   const title = calendar?.summary;
   const description = calendar?.description;
+  const id = calendar?.id;
 
-  const [inputTitle, setInputTitle] = useState(title);
-  const [inputDesc, setInputDesc] = useState(description); 
+  const [inputTitle, setInputTitle] = useState<string>(title);
+  const [inputDesc, setInputDesc] = useState<string>(description); 
 
   //whenever this is clicked it will revert the input values to original
   const handleEdit = () =>{
     setInputTitle(title);
     setInputDesc(description);
+
+    console.log(id);
   };
 
-  const handleSubmit = () =>{
-    console.log(data?.calendar);
+  const handleSubmit = async () =>{
+
+    const newData = {
+      summary: inputTitle,
+      description: inputDesc,
+    };
+
+    // console.log(data?.calendar);
+
+    const response = await fetch(`/api/google?id=${eventId}`, 
+      {
+        method:"PATCH", 
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(newData),
+      }).then((res)=> res.json());
+    
+    console.log(response);
+    
+    mutate("api/google");
   };
 
   return (
@@ -50,12 +74,12 @@ export default function editButton({eventId}:any) {
           </DialogDescription>
         </DialogHeader>
         <div className='flex flex-col gap-4'>
-          <Input type='text' value={inputTitle} onChange={(e) =>setInputTitle(e.target.value)} placeholder='title'/>
-          <Input type='text' value={inputDesc} onChange={(e) =>setInputDesc(e.target.value)} placeholder='description'/>
+          <Input type='text' value={inputTitle ?? ""} onChange={(e) =>setInputTitle(e.target.value)} placeholder='title'/>
+          <Input type='text' value={inputDesc ?? ""} onChange={(e) =>setInputDesc(e.target.value)} placeholder='description'/>
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button>
+            <Button onClick={handleSubmit}>
               Save
             </Button>
           </DialogClose>

@@ -25,7 +25,7 @@ export default function googleApi() {
   const event = data?.calendar?.items;
 
   const handleDelete = async (eventId: any) => {
-    await fetch(`/api/google?eventId=${eventId}`, {
+    await fetch(`/api/google?id=${eventId}`, {
       method: "DELETE",
     });
 
