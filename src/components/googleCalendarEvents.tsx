@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import useSWR, { useSWRConfig } from "swr"
+import useSWR from "swr"
 
 import { SignedIn } from "@clerk/nextjs";
 
@@ -18,31 +18,13 @@ import EditDialog from "./editDialog";
 
 export default function googleApi() {
 
-  const {mutate} = useSWRConfig();
-
   const {data} = useSWR("/api/google", (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
 
-  const event = data?.calendar?.items;
-
-  const handleDelete = async (eventId: any) => {
-    await fetch(`/api/google?id=${eventId}`, {
-      method: "DELETE",
-    });
-
-    mutate("/api/google");
-  };  
+  const event = data?.calendar?.items;  
   
   const isValidDate = (date: any) => {
     return !isNaN(Date.parse(date));
   };
-
-  // short time format
-  // const timeFormat = (time: any) => {
-  //   if (!isValidDate(time)) return "Invalid time";
-  //   const timeShort = new Date(time);
-  //   const shortTime = new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(timeShort);
-  //   return shortTime;
-  // };
 
   // date format
   const dateFormat = (time: any) => {
@@ -87,7 +69,7 @@ export default function googleApi() {
                   {/* <span>{event?.organizer?.email}</span> */}
                 </CardDescription>
                 <div className="flex gap-2">
-                  <DeleteButton eventId={eventId} onDelete={handleDelete}/>
+                  <DeleteButton eventId={eventId}/>
                   <EditDialog eventId={eventId}/>
                 </div>
               </CardFooter>

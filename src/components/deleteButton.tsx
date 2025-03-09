@@ -1,8 +1,21 @@
 "use client";
 import { Button } from "./ui/button"
 
-export default function deleteButton({eventId, onDelete}:any) {
+import { useSWRConfig } from "swr";
+
+export default function deleteButton({eventId}:any) {
+
+    const {mutate} = useSWRConfig();
+
+    const handleDelete = async () => {
+        await fetch(`/api/google?id=${eventId}`, {
+          method: "DELETE",
+        });
+    
+        mutate("/api/google");
+    };  
+
     return (
-        <Button onClick={() => onDelete(eventId)}>Delete</Button>
+        <Button onClick={handleDelete}>Delete</Button>
     );
 };
