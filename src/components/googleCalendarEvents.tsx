@@ -14,7 +14,7 @@ import useSWR from "swr"
 import { SignedIn } from "@clerk/nextjs";
 
 import DeleteButton from "./deleteButton";
-import EditDialog from "./editDialog";
+import EditButton from "./editButton";
 
 export default function googleApi() {
 
@@ -70,7 +70,7 @@ export default function googleApi() {
                 </CardDescription>
                 <div className="flex gap-2">
                   <DeleteButton eventId={eventId}/>
-                  <EditDialog eventId={eventId}/>
+                  <EditButton eventId={eventId}/>
                 </div>
               </CardFooter>
             </Card>
