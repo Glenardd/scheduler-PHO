@@ -1,14 +1,5 @@
 "use client";
 
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
-
 import {
   Table,
   TableBody,
@@ -17,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 
 import useSWR from "swr"
@@ -26,6 +17,7 @@ import { SignedIn } from "@clerk/nextjs";
 
 import DeleteButton from "./deleteButton";
 import EditButton from "./editButton";
+import AddEventButton from "./addEventButton";
 
 export default function googleApi() {
 
@@ -52,6 +44,7 @@ export default function googleApi() {
   return (
     <SignedIn>
       <div>
+      <AddEventButton />
       {
         <Table>
           <TableHeader>
@@ -68,8 +61,8 @@ export default function googleApi() {
                   <TableRow key={eventId}>
                     <TableCell>{event?.summary}</TableCell>
                     <TableCell>{dateFormat(event?.end?.dateTime)}</TableCell>
-                    <TableCell><DeleteButton eventId={eventId} /></TableCell>
                     <TableCell><EditButton eventId={eventId} /></TableCell>
+                    <TableCell><DeleteButton eventId={eventId} /></TableCell>
                   </TableRow>
                 )
               }).reverse()

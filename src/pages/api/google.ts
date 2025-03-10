@@ -78,4 +78,16 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
 
         return res.status(200).json({ message: "Event updated successfully", changes: event });
     };
+
+    if(req.method === "POST"){
+        const AddEvent = req.body;
+
+        await google.calendar("v3").events.insert({
+            calendarId: "primary",
+            auth: googleClient,
+            requestBody: AddEvent,
+        });
+
+        
+    };
 };
