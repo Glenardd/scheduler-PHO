@@ -17,14 +17,18 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
   
-
+import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { Input } from "./ui/input";
 
+import { useState } from "react";
+
 export default function addEventButton() {
 
+    const [date, setDate] = useState<Date | undefined>(new Date());
+    
     const handleAddEvent = () => {
-        console.log("event added");
+        console.log(date);
     };
 
     return (
@@ -39,9 +43,18 @@ export default function addEventButton() {
                 <Input placeholder="Event title"/>
                 <Popover>
                     <PopoverTrigger asChild>
-                        <Button variant="outline">Date<CalendarIcon className="ml-auto h-4 w-4 opacity-50" /></Button> 
+                        <Button variant="outline">
+                            {date === undefined || date === null ? "Date" : date.toLocaleDateString()}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" /></Button> 
                     </PopoverTrigger>
-                    <PopoverContent>Place content for the popover here.</PopoverContent>
+                    <PopoverContent className="w-auto p-0" align="end">
+                        <Calendar 
+                            mode="single" 
+                            initialFocus
+                            selected={date}
+                            onSelect={setDate}
+                        />
+                    </PopoverContent>
                 </Popover>
                 <DialogFooter>
                     <DialogClose asChild>
