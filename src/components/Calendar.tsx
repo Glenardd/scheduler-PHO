@@ -10,11 +10,11 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Calendar = () => {
   const calendarRef = useRef(null);
-  const modalRef = useRef(null); // Ref for detecting outside clicks
+  const popoverRef = useRef<HTMLDivElement | null>(null);
   const [events, setEvents] = useState<any[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [popoverPosition, setPopoverPosition] = useState<{ top: number; left: number } | null>(null);
 
   const { data } = useSWR("/api/google", fetcher);
 
@@ -36,11 +36,15 @@ const Calendar = () => {
     }
   }, [data]);
 
-  // Handle event click
+  // Handle event click and position the popover
   const handleEventClick = (info: any) => {
+    const rect = info.jsEvent.target.getBoundingClientRect();
+    const top = rect.top + window.scrollY + 30;
+    const left = rect.left + window.scrollX + rect.width / 2; // Center the popover
+
     if (selectedEvent?.id === info.event.id) {
-      setIsModalOpen(false); // Toggle off if same event is clicked
       setSelectedEvent(null);
+      setPopoverPosition(null);
     } else {
       setSelectedEvent({
         id: info.event.id,
@@ -49,36 +53,32 @@ const Calendar = () => {
         end: info.event.end?.toISOString(),
         description: info.event.extendedProps.description,
       });
-      setIsModalOpen(true);
+      setPopoverPosition({ top, left });
     }
   };
 
-  // Close modal when clicking outside
+  // Close popover when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !(modalRef.current as any).contains(event.target)) {
-        setIsModalOpen(false);
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
         setSelectedEvent(null);
+        setPopoverPosition(null);
       }
     };
 
-    if (isModalOpen) {
+    if (selectedEvent) {
       document.addEventListener("mousedown", handleClickOutside);
-      document.body.classList.add("modal-open"); // Add class when modal is open
-    } else {
-      document.body.classList.remove("modal-open"); // Remove class when modal is closed
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      document.body.classList.remove("modal-open"); // Cleanup
     };
-  }, [isModalOpen]);
+  }, [selectedEvent]);
 
   if (!isMounted) return null;
 
   return (
-    <div className="w-full h-full overflow-auto">
+    <div className="w-full h-full overflow-auto ">
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin]}
@@ -88,20 +88,29 @@ const Calendar = () => {
         eventClick={handleEventClick}
       />
 
-      {/* Event Details Modal */}
-      {isModalOpen && selectedEvent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div ref={modalRef} className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-bold">{selectedEvent.title}</h2>
-            <p><strong>Start:</strong> {new Date(selectedEvent.start).toLocaleString()}</p>
-            <p><strong>End:</strong> {new Date(selectedEvent.end).toLocaleString()}</p>
-            <button 
-              onClick={() => setIsModalOpen(false)}
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Close
-            </button>
-          </div>
+      {/* Event Details Popover */}
+      {selectedEvent && popoverPosition && (
+        <div
+          ref={popoverRef}
+          className="absolute bg-white shadow-lg rounded-lg p-4 w-64 border z-50 transform -translate-x-1/2"
+          style={{ top: popoverPosition.top, left: popoverPosition.left }}
+        >
+          <h2 className="text-lg font-bold">{selectedEvent.title}</h2>
+          <p className="text-sm text-gray-600">
+            <strong>Event Date:</strong> {new Date(selectedEvent.start).toLocaleString()}
+          </p>
+          <p className="text-sm text-gray-600">
+            <strong>Description:</strong> {selectedEvent.description}
+          </p>
+          <button
+            onClick={() => {
+              setSelectedEvent(null);
+              setPopoverPosition(null);
+            }}
+            className="mt-2 bg-blue-500 text-white px-3 py-1 rounded text-sm"
+          >
+            Close
+          </button>
         </div>
       )}
     </div>
