@@ -86,6 +86,8 @@ const Calendar = () => {
         selectable
         events={events}
         eventClick={handleEventClick}
+        height="auto" // Adjusts dynamically to content
+  contentHeight={800} // Fixed height in pixels
       />
 
       {/* Event Details Popover */}
