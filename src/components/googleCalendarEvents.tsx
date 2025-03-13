@@ -19,7 +19,7 @@ import DeleteButton from "./deleteButton";
 import EditButton from "./editButton";
 import AddEventButton from "./addEventButton";
 
-export default function googleApi() {
+export default function googleCalendarEvents() {
 
   const {data} = useSWR("/api/google", (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
 
@@ -42,35 +42,35 @@ export default function googleApi() {
   // event?.map((data:any)=> console.log(data?.organizer?.displayName))
 
   return (
-    <SignedIn>
-      <div>
-      <AddEventButton />
-      {
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Health Celebrations</TableHead>
-              <TableHead>DAY/DATE</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {
-              event?.map((event: any) => {
-                const eventId = event?.id;
-                return (
-                  <TableRow key={eventId}>
-                    <TableCell>{event?.summary}</TableCell>
-                    <TableCell>{dateFormat(event?.end?.dateTime)}</TableCell>
+    <div>
+    <AddEventButton />
+    {
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Health Celebrations</TableHead>
+            <TableHead>DAY/DATE</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {
+            event?.map((event: any) => {
+              const eventId = event?.id;
+              return (
+                <TableRow key={eventId}>
+                  <TableCell>{event?.summary}</TableCell>
+                  <TableCell>{dateFormat(event?.end?.dateTime)}</TableCell>
+                  <SignedIn>
                     <TableCell><EditButton eventId={eventId} /></TableCell>
                     <TableCell><DeleteButton eventId={eventId} /></TableCell>
-                  </TableRow>
-                )
-              }).reverse()
-            }
-          </TableBody>
-        </Table>
-      }
-      </div>
-    </SignedIn>
+                  </SignedIn>
+                </TableRow>
+              )
+            }).reverse()
+          }
+        </TableBody>
+      </Table>
+    }
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { AppSidebar } from "./app-sidebar";
 
 export default function DisableSidebar() {
 
-    const paths = ["/sign-in"];
+    const paths = ["/admin/sign-in"];
 
     const pathname = usePathname();
     

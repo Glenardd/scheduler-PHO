@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
             requestBody: event,
         });
 
-        return res.status(200).json({ message: "Event updated successfully", changes: event });
+        return res.status(200).json({ message: "Event updated" });
     };
 
     if(req.method === "POST"){
@@ -88,6 +88,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
             requestBody: AddEvent,
         });
 
+        return res.status(200).json({message: "Event added"});
         
     };
 };

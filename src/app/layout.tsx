@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from '@clerk/nextjs'
 
-import DisableSidebar from "@/components/disableSidebar";
-import DisableNavbar from "@/components/disableNavbar";
+import DisableSidebar from "@/components/side-bar/disableSidebar";
+import DisableNavbar from "@/components/nav-bar/disableNavbar";
 
-import SidebarProvider from "@/components/sidebarProvider";
+import SidebarProvider from "@/components/side-bar/sidebarProvider";
 import "./globals.css";
 
 

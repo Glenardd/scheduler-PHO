@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 
 import { useUser } from "@clerk/nextjs";
 
-export default function navUser() {
+export default function user() {
 
     const user = useUser()?.user!!;
     const username = user?.fullName!!;

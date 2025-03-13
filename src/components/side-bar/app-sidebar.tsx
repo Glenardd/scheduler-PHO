@@ -1,6 +1,6 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 import User from "./user";
-import Logout from "./logout";
+import Logout from "../logout";
 
 import {
   Sidebar,

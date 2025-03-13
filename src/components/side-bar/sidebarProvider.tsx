@@ -1,5 +1,5 @@
 "use client";
-import { SidebarProvider } from "./ui/sidebar";
+import { SidebarProvider } from "../ui/sidebar";
 import { useState } from "react";
 
 export default function sidebarProvider({ children }:any) {

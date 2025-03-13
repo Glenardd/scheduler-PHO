@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./navbar";
 
 export default function disableNavbar() {
-    const paths = ["/sign-in"];
+    const paths = ["/admin/sign-in"];
   
     const pathname = usePathname();
     

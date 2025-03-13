@@ -20,15 +20,41 @@ import {
 import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { Input } from "./ui/input";
-
 import { useState } from "react";
+import { useSWRConfig } from "swr";
 
 export default function addEventButton() {
 
-    const [date, setDate] = useState<Date | undefined>(new Date());
+    const [date, setDate] = useState<Date | undefined>();
+    const [title, setTitle] = useState<string>("");
     
-    const handleAddEvent = () => {
-        console.log(date);
+    const {mutate} = useSWRConfig();
+
+    const handleAddEvent = async () => {
+
+        const newData = {
+            summary: title,
+            start:{
+                dateTime: date,
+            },
+            end:{
+                dateTime: date
+            }
+        };
+
+        const response = await fetch("/api/google", 
+            {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json' 
+                  },
+                body: JSON.stringify(newData)
+            },
+        ).then((res)=> res.json());
+
+        console.log(response);
+
+        mutate("/api/google");
     };
 
     return (
@@ -40,7 +66,7 @@ export default function addEventButton() {
                 <DialogHeader>
                     <DialogTitle>New event</DialogTitle>
                 </DialogHeader>
-                <Input placeholder="Event title"/>
+                <Input placeholder="Event title" onChange={(e)=>setTitle(e.target.value)}/>
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button variant="outline">

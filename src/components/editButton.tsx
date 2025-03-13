@@ -75,7 +75,6 @@ export default function editButton({eventId}:any) {
         </DialogHeader>
         <div className='flex flex-col gap-4'>
           <Input type='text' value={inputTitle ?? ""} onChange={(e) =>setInputTitle(e.target.value)} placeholder='title'/>
-          <Input type='text' value={inputDesc ?? ""} onChange={(e) =>setInputDesc(e.target.value)} placeholder='description'/>
         </div>
         <DialogFooter>
           <DialogClose asChild>

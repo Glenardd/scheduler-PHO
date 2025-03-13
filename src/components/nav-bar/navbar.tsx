@@ -1,7 +1,8 @@
-import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedOut, SignInButton, SignedIn} from "@clerk/nextjs";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import { SidebarTrigger } from "./ui/sidebar";
+import { Button } from "../ui/button";
+import { SidebarTrigger } from "../ui/sidebar";
+import PopoverUser from "./popoverUser";
 
 export default function navbar() {
     return (
@@ -32,14 +33,7 @@ export default function navbar() {
             <div className="flex items-center flex-shrink-0 text-black mr-6">
                 <div className="hidden md:block">
                     <SignedIn>
-                        <UserButton appearance={{
-                            elements: {
-                                avatarBox: {
-                                    width: 40,
-                                    height: 40
-                                },
-                            }
-                        }} />
+                        <PopoverUser />
                     </SignedIn>
                 </div>
                 <div className="hidden md:block">
