@@ -4,15 +4,10 @@ import {
     AvatarFallback
 } from "@/components/ui/avatar";
 
-// import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import { usePathname } from "next/navigation";
+import CheckRoot from "../checkRoot";
 import { useUser } from "@clerk/nextjs";
 
 export default function user() {
-
-    const paths = ["/", "/calendar"];
-  
-    const pathname = usePathname();
 
     const user = useUser()?.user!!;
     const username = user?.fullName!!;
@@ -30,5 +25,5 @@ export default function user() {
         );
     };
 
-    return <div>{!paths.includes(pathname!!) && avatar()}</div>;
+    return <CheckRoot>{avatar()}</CheckRoot>;
 };

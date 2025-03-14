@@ -15,11 +15,35 @@ import { Button } from "@/components/ui/button";
 
 import { useUser } from "@clerk/nextjs";
 
+import CheckRoot from "../checkRoot";
+
 export default function user() {
 
     const user = useUser()?.user!!;
     const username = user?.fullName!!;
     const userimage = user?.imageUrl!!;
+
+    const avatar = () => {
+        return (
+            <div className="flex items-center gap-3 p-4">
+                <Avatar className="h-14 w-14 rounded-full">
+                    <AvatarImage src={userimage} alt={username} />
+                    <AvatarFallback className="rounded-lg">{username}</AvatarFallback>
+                </Avatar>
+                <span className="truncate font-semibold">{username}</span>
+            </div>
+        );
+    };
+
+    const signInButton = () => {
+        return (
+            <div className="p-2">
+                <SignInButton>
+                    <Button>Sign In</Button>
+                </SignInButton>
+            </div>
+        );
+    };
 
     return (
         <>
@@ -28,22 +52,12 @@ export default function user() {
                     <SidebarMenu>
                         <SidebarMenuItem>
                             {/* show image when user is signed in */}
-                            <div className="flex items-center gap-3 p-4">
-                                <Avatar className="h-14 w-14 rounded-full">
-                                    <AvatarImage src={userimage} alt={username} />
-                                    <AvatarFallback className="rounded-lg">{username}</AvatarFallback>
-                                </Avatar>
-                                <span className="truncate font-semibold">{username}</span>
-                            </div>
+                            <CheckRoot>{avatar()}</CheckRoot>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SignedIn>
                 <SignedOut>
-                    <div className="p-2">
-                        <SignInButton>
-                            <Button>Sign In</Button>
-                        </SignInButton>
-                    </div>
+                    <CheckRoot>{signInButton()}</CheckRoot>
                 </SignedOut>
             </div>
         </>
