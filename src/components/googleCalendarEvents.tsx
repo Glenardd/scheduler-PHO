@@ -21,9 +21,9 @@ import AddEventButton from "./addEventButton";
 
 export default function googleCalendarEvents() {
 
-  const {data} = useSWR("/api/google", (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
+  const {data} = useSWR("/api/mongodb", (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
 
-  const event = data?.calendar?.items;  
+  const event = data?.data;  
   
   const isValidDate = (date: any) => {
     return !isNaN(Date.parse(date));
@@ -55,11 +55,11 @@ export default function googleCalendarEvents() {
         <TableBody>
           {
             event?.map((event: any) => {
-              const eventId = event?.id;
+              const eventId = event?._id;
               return (
                 <TableRow key={eventId}>
-                  <TableCell>{event?.summary}</TableCell>
-                  <TableCell>{dateFormat(event?.end?.dateTime)}</TableCell>
+                  <TableCell>{event?.event_title}</TableCell>
+                  <TableCell>{dateFormat(event?.date)}</TableCell>
                   <SignedIn>
                     <TableCell><EditButton eventId={eventId} /></TableCell>
                     <TableCell><DeleteButton eventId={eventId} /></TableCell>

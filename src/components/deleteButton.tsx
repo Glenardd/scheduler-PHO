@@ -8,10 +8,13 @@ export default function deleteButton({eventId}:any) {
     const {mutate} = useSWRConfig();
 
     const handleDelete = async () => {
-        await fetch(`/api/google?id=${eventId}`, {
+        const response = await fetch(`/api/mongodb?id=${eventId}`, {
           method: "DELETE",
         });
-    
+
+        const data = await response.json();
+        console.log(data?.message);
+
         mutate("/api/google");
     };  
 
