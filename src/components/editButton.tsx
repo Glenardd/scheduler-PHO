@@ -12,8 +12,6 @@ import {
 } from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState } from 'react';
 
 import useSWR, { useSWRConfig } from "swr";
 
@@ -32,8 +30,23 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { object, string } from 'yup';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "lucide-react";
+import { toast } from 'sonner';
+import { useEffect } from 'react';
 
 export default function editButton({ eventId }: any) {
 
@@ -47,115 +60,77 @@ export default function editButton({ eventId }: any) {
   const approved = event?.approved;
   const eventFrom = event?.event_from;
 
-  const [inputTitle, setInputTitle] = useState<string>(title);
-  const [inputDate, setInputDate] = useState<Date>(date);
-  const [isApproved, setIsApproved] = useState<any>(approved);
-  const [eventfrom, setEventFrom] = useState<string>(eventFrom);
+  // const [inputTitle, setInputTitle] = useState<string>(title);
+  // const [inputDate, setInputDate] = useState<string>(date);
+  // const [isApproved, setIsApproved] = useState<any>(approved);
+  // const [eventfrom, setEventFrom] = useState<string>(eventFrom);
 
   //whenever this is clicked it will revert the input values to original
-  const handleEdit = () => {
-    setInputTitle(title);
-    setInputDate(date);
-    setInputTitle(title);
-    setIsApproved(approved);
-    setEventFrom(eventFrom);
-  };
+  // const handleEdit = () => {
+  //   setInputTitle(title);
+  //   setInputDate(date);
+  //   setInputTitle(title);
+  //   setIsApproved(approved);
+  //   setEventFrom(eventFrom);
+  // };
+
+  let formSchema = object().shape({
+    title: string().required("Don't leave empty"),
+    eventFrom: string().required("Please select"),
+    approved: string().required("Please select from the choices"),
+    date: string().required("Select date please"),
+  });
+
+  const form = useForm({
+    resolver: yupResolver(formSchema),
+    defaultValues: {
+      title: "",
+      eventFrom: "",
+      approved: "",
+      date: "",
+    },
+  });
+
+  useEffect(() => {
+    if (event) {
+      form.reset({
+        title: title,
+        eventFrom: eventFrom,
+        approved: approved,
+        date: date,
+      });
+    }
+  }, [event, form, title, eventFrom, approved, date]);
 
   const handleSubmit = async () => {
 
     const newData = {
-      "approved": `${isApproved}`,
-      "date": `${inputDate}`,
-      "event_from": `${eventFrom}`,
-      "event_title": `${inputTitle}`
+      "approved": `${form.getValues().approved}`,
+      "date": `${form.getValues().date}`,
+      "event_from": `${form.getValues().eventFrom}`,
+      "event_title": `${form.getValues().title}`,
     };
 
-    const response = await fetch(`/api/mongodb?id=${eventId}`, 
+    const response = await fetch(`/api/mongodb?id=${eventId}`,
       {
-        method:"PATCH", 
-        headers: { 
-          'Content-Type': 'application/json' 
+        method: "PATCH",
+        headers: {
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(newData),
-      }).then((res)=> res.json());
+      }).then((res) => res.json());
 
-    console.log(response);
+    toast(response?.message);
+
+    console.log(form.getValues());
 
     mutate("api/google");
-  };
-
-  const eventTitle = () => {
-    return (
-      <>
-        <Label>Title</Label>
-        <Input type='text' value={inputTitle ?? ""} onChange={(e) => setInputTitle(e.target.value)} placeholder='title' />
-      </>
-    );
-  };
-
-  const is_Approved = () => {
-    return (
-      <>
-        <Label>Approved?</Label>
-        <Select value={isApproved} onValueChange={(val) => setIsApproved(val)}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select"/>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='true'>True</SelectItem>
-            <SelectItem value='false'>False</SelectItem>
-          </SelectContent>
-        </Select>
-      </>
-    );
-  };
-
-  const event_from = () => {
-    return (
-      <>
-        <Label>Event from</Label>
-        {/* <Input type='text' value={eventfrom} onChange={(e) => setEventFrom(e.target.value)} placeholder='Event from' /> */}
-        <Select value={eventfrom} onValueChange={(val)=> setEventFrom(val)}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select" /><></>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='DOH'>DOH</SelectItem>
-            <SelectItem value='PHO'>PHO</SelectItem>
-          </SelectContent>
-        </Select>
-      </>
-    );
-  };
-
-  const _date = () => {
-    return (
-      <>
-        <Label>Date</Label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline">
-              {inputDate ? new Date(inputDate).toLocaleDateString() : "Date"}
-              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end">
-            <Calendar
-              mode="single"
-              initialFocus
-              selected={new Date(inputDate)}
-              onSelect={(day) => setInputDate(day ?? new Date())}
-            />
-          </PopoverContent>
-        </Popover>
-      </>
-    );
   };
 
   return (
     <Dialog aria-describedby="dialog-description">
       <DialogTrigger asChild>
-        <Button onClick={handleEdit}>Edit</Button>
+        <Button>Edit</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -165,18 +140,112 @@ export default function editButton({ eventId }: any) {
           </DialogDescription>
         </DialogHeader>
         <div className='flex flex-col gap-4'>
-          {eventTitle()}
-          {event_from()}
-          {_date()}
-          {is_Approved()}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSubmit)}>
+
+              {/* title */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="mt-4">Title</FormLabel>
+                      <Input placeholder="Enter title" {...field} />
+                      <FormMessage>{typeof form.formState.errors.title?.message === 'string' ? form.formState.errors.title.message : ''}</FormMessage>
+                    </FormItem>
+                  );
+                }}
+              />
+
+              {/* event from */}
+              <FormField
+                control={form.control}
+                name="eventFrom"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="mt-4">Event from</FormLabel>
+                      <Select value={String(field.value)} onValueChange={(value) => field.onChange(value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value='DOH'>DOH</SelectItem>
+                          <SelectItem value='PHO'>PHO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage>{typeof form.formState.errors.eventFrom?.message === 'string' ? form.formState.errors.eventFrom.message : ''}</FormMessage>
+                    </FormItem>
+                  );
+                }}
+              />
+
+              {/* date */}
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="mt-4">Date</FormLabel>
+                      <FormControl>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button className="w-full" variant="outline">
+                              {!form.getValues().date ? "Date" : new Date(form.getValues().date).toLocaleDateString()}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="end">
+                            <Calendar
+                              mode="single"
+                              initialFocus
+                              selected={new Date(field.value)}
+                              onSelect={field.onChange}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                      <FormMessage>
+                        {typeof form.formState.errors.date?.message === 'string' ? form.formState.errors.date.message : ''}
+                      </FormMessage>
+                    </FormItem>
+                  )
+                }}
+              />
+
+              {/* approved */}
+              <FormField
+                control={form.control}
+                name="approved"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="mt-4">Approved</FormLabel>
+                      <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value='true'>True</SelectItem>
+                          <SelectItem value='false'>False</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage>{typeof form.formState.errors.approved?.message === 'string' ? form.formState.errors.approved.message : ''}</FormMessage>
+                    </FormItem>
+                  )
+                }}
+              />
+
+              <DialogFooter className="mt-4">
+                <Button type='submit'>
+                  Update
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
         </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button onClick={handleSubmit}>
-              Save
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

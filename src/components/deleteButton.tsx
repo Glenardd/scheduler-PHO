@@ -2,6 +2,7 @@
 import { Button } from "./ui/button"
 
 import { useSWRConfig } from "swr";
+import { toast } from "sonner";
 
 export default function deleteButton({eventId}:any) {
 
@@ -13,7 +14,8 @@ export default function deleteButton({eventId}:any) {
         });
 
         const data = await response.json();
-        console.log(data?.message);
+        
+        toast(data?.message)
 
         mutate("/api/google");
     };  

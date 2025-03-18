@@ -21,10 +21,10 @@ import AddEventButton from "./addEventButton";
 
 export default function googleCalendarEvents() {
 
-  const {data} = useSWR("/api/mongodb", (url)=> fetch(url, {method:"GET"}).then((res)=> res.json()));
+  const { data } = useSWR("/api/mongodb", (url) => fetch(url, { method: "GET" }).then((res) => res.json()));
 
-  const event = data?.data;  
-  
+  const event = data?.data;
+
   const isValidDate = (date: any) => {
     return !isNaN(Date.parse(date));
   };
@@ -43,34 +43,40 @@ export default function googleCalendarEvents() {
 
   return (
     <div>
-    <AddEventButton />
-    {
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Health Celebrations</TableHead>
-            <TableHead>DAY/DATE</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {
-            event?.map((event: any) => {
-              const eventId = event?._id;
-              return (
-                <TableRow key={eventId}>
-                  <TableCell>{event?.event_title}</TableCell>
-                  <TableCell>{dateFormat(event?.date)}</TableCell>
-                  <SignedIn>
-                    <TableCell><EditButton eventId={eventId} /></TableCell>
-                    <TableCell><DeleteButton eventId={eventId} /></TableCell>
-                  </SignedIn>
-                </TableRow>
-              )
-            }).reverse()
-          }
-        </TableBody>
-      </Table>
-    }
+      <SignedIn>
+        <AddEventButton />
+      </SignedIn>
+      {
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Health Celebrations</TableHead>
+              <TableHead>DAY/DATE</TableHead>
+              <TableHead>Event from</TableHead>
+              <TableHead>Approved</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {
+              event?.map((event: any) => {
+                const eventId = event?._id;
+                return (
+                  <TableRow key={eventId}>
+                    <TableCell>{event?.event_title}</TableCell>
+                    <TableCell>{dateFormat(event?.date)}</TableCell>
+                    <TableCell>{event?.event_from}</TableCell>
+                    <TableCell>{event?.approved}</TableCell>
+                    <SignedIn>
+                      <TableCell><EditButton eventId={eventId} /></TableCell>
+                      <TableCell><DeleteButton eventId={eventId} /></TableCell>
+                    </SignedIn>
+                  </TableRow>
+                )
+              }).reverse()
+            }
+          </TableBody>
+        </Table>
+      }
     </div>
   );
 }

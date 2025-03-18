@@ -27,7 +27,7 @@ export default function navbar() {
                 justify-center
             ">
                 <Image src="/PHO.png" width={50} height={50} alt="PHO-Logo"/>
-                <span>Provincial Health Office Scheduler</span>
+                <span>Provincial Health Office 2025 Health Calendar</span>
                 <Image src="/PGP.png" width={50} height={50} alt="PGP-Logo" />
             </div>
             <div className="flex items-center flex-shrink-0 text-black mr-6">

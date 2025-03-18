@@ -8,6 +8,7 @@ import DisableNavbar from "@/components/nav-bar/disableNavbar";
 import SidebarProvider from "@/components/side-bar/sidebarProvider";
 import "./globals.css";
 
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
               <DisableNavbar />
               {children}
             </main>
+            <Toaster />
           </SidebarProvider>
           </body>
       </ClerkProvider>

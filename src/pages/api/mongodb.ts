@@ -30,6 +30,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const result = await db.find({}).toArray();
 
+            if (result.length === 0) {
+                return res.status(404).json({ message: "No events found" });
+            }
+
             return res.json({ data: result });
         };
     };
