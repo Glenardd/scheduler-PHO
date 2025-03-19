@@ -9,7 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-
 import useSWR from "swr"
 
 import { SignedIn } from "@clerk/nextjs";
@@ -17,8 +16,14 @@ import { SignedIn } from "@clerk/nextjs";
 import DeleteButton from "./deleteButton";
 import EditButton from "./editButton";
 import AddEventButton from "./addEventButton";
+import ListFilterButton from "./listFilterButton";
+
+import { useState } from "react";
 
 export default function googleCalendarEvents() {
+
+  const [month, setMonth] = useState<string | undefined>(undefined);
+  const [approved, setApprove] = useState<string | undefined>(undefined);
 
   const { data } = useSWR("/api/mongodb", (url) => fetch(url, { method: "GET" }).then((res) => res.json()));
 
@@ -39,11 +44,21 @@ export default function googleCalendarEvents() {
   // console.log(data?.calendar?.items);
 
   // event?.map((data:any)=> console.log(data?.organizer?.displayName))
+  
+  const filteredData = event?.filter((item: any) => {
+    const itemMonth = !month || dateFormat(item.date_start).includes(month);
+    const isApproved = !approved || approved === item.approved;
+
+    return itemMonth && isApproved;
+  }) || [];
 
   return (
     <div className="m-4">
       <SignedIn>
-        <AddEventButton />
+        <div className="flex gap-4">
+          <AddEventButton />
+          <ListFilterButton setApprove={setApprove} setMonth={setMonth} month_={month} approved={approved} />
+        </div>
       </SignedIn>
       <Table>
         <TableHeader>
@@ -57,7 +72,8 @@ export default function googleCalendarEvents() {
         </TableHeader>
         <TableBody>
           {
-            event?.map((event: any) => {
+            filteredData?.map((event: any) => {
+
               const eventId = event?._id;
               return (
                 <TableRow key={eventId}>
@@ -71,7 +87,7 @@ export default function googleCalendarEvents() {
                     <TableCell><DeleteButton eventId={eventId} /></TableCell>
                   </SignedIn>
                 </TableRow>
-              )
+              );
             }).reverse()
           }
         </TableBody>
