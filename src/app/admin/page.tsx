@@ -1,9 +1,9 @@
-import GoogleCalendarEvents from "@/components/googleCalendarEvents";
+import AdminShowEvents from "@/components/adminShowEvents";
 
 export default function page() {
   return (
     <> 
-      <GoogleCalendarEvents />
+      <AdminShowEvents />
     </>
   );
 };

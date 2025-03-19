@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose
 } from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
@@ -21,7 +20,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  SelectLabel
 } from "@/components/ui/select"
 
 import {
@@ -56,29 +54,17 @@ export default function editButton({ eventId }: any) {
 
   const event = data?.data[0];
   const title = event?.event_title;
-  const date = event?.date;
+  const date_start = event?.date_start;
+  const date_end = event?.date_end;
   const approved = event?.approved;
   const eventFrom = event?.event_from;
-
-  // const [inputTitle, setInputTitle] = useState<string>(title);
-  // const [inputDate, setInputDate] = useState<string>(date);
-  // const [isApproved, setIsApproved] = useState<any>(approved);
-  // const [eventfrom, setEventFrom] = useState<string>(eventFrom);
-
-  //whenever this is clicked it will revert the input values to original
-  // const handleEdit = () => {
-  //   setInputTitle(title);
-  //   setInputDate(date);
-  //   setInputTitle(title);
-  //   setIsApproved(approved);
-  //   setEventFrom(eventFrom);
-  // };
 
   let formSchema = object().shape({
     title: string().required("Don't leave empty"),
     eventFrom: string().required("Please select"),
     approved: string().required("Please select from the choices"),
-    date: string().required("Select date please"),
+    date_start: string().required("Select starting date please"),
+    date_end: string().required("Select ending date please")
   });
 
   const form = useForm({
@@ -87,7 +73,8 @@ export default function editButton({ eventId }: any) {
       title: "",
       eventFrom: "",
       approved: "",
-      date: "",
+      date_start: "",
+      date_end: "",
     },
   });
 
@@ -97,16 +84,18 @@ export default function editButton({ eventId }: any) {
         title: title,
         eventFrom: eventFrom,
         approved: approved,
-        date: date,
+        date_start: date_start,
+        date_end: date_end,
       });
     }
-  }, [event, form, title, eventFrom, approved, date]);
+  }, [event, form, title, eventFrom, approved, date_start, date_end]);
 
   const handleSubmit = async () => {
 
     const newData = {
       "approved": `${form.getValues().approved}`,
-      "date": `${form.getValues().date}`,
+      "date_start": `${form.getValues().date_start}`,
+      "date_end": `${form.getValues().date_end}`,
       "event_from": `${form.getValues().eventFrom}`,
       "event_title": `${form.getValues().title}`,
     };
@@ -124,7 +113,7 @@ export default function editButton({ eventId }: any) {
 
     console.log(form.getValues());
 
-    mutate("api/google");
+    mutate("/api/mongodb");
   };
 
   return (
@@ -181,19 +170,19 @@ export default function editButton({ eventId }: any) {
                 }}
               />
 
-              {/* date */}
+              {/* date start */}
               <FormField
                 control={form.control}
-                name="date"
+                name="date_start"
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel className="mt-4">Date</FormLabel>
+                      <FormLabel className="mt-4">Date start</FormLabel>
                       <FormControl>
                         <Popover>
                           <PopoverTrigger asChild>
                             <Button className="w-full" variant="outline">
-                              {!form.getValues().date ? "Date" : new Date(form.getValues().date).toLocaleDateString()}
+                              {!form.getValues().date_start ? "Date" : new Date(form.getValues().date_start).toLocaleDateString()}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
                           </PopoverTrigger>
@@ -208,7 +197,41 @@ export default function editButton({ eventId }: any) {
                         </Popover>
                       </FormControl>
                       <FormMessage>
-                        {typeof form.formState.errors.date?.message === 'string' ? form.formState.errors.date.message : ''}
+                        {typeof form.formState.errors.date_start?.message === 'string' ? form.formState.errors.date_start.message : ''}
+                      </FormMessage>
+                    </FormItem>
+                  )
+                }}
+              />
+
+              {/* date end */}
+              <FormField
+                control={form.control}
+                name="date_end"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="mt-4">Date end</FormLabel>
+                      <FormControl>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button className="w-full" variant="outline">
+                              {!form.getValues().date_end ? "Date" : new Date(form.getValues().date_end).toLocaleDateString()}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="end">
+                            <Calendar
+                              mode="single"
+                              initialFocus
+                              selected={new Date(field.value)}
+                              onSelect={field.onChange}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                      <FormMessage>
+                        {typeof form.formState.errors.date_end?.message === 'string' ? form.formState.errors.date_end.message : ''}
                       </FormMessage>
                     </FormItem>
                   )

@@ -59,11 +59,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ message: "Missing or invalid eventId" });
         };
 
-        const { approved, date, event_from, event_title } = req.body;
+        const { approved, date_start, date_end, event_from, event_title } = req.body;
 
         const result = await db.updateOne(
             { _id: new ObjectId(id) },
-            { $set: { approved, date, event_from, event_title } }
+            { $set: { approved, date_start, date_end, event_from, event_title } }
         );
 
         if (result.matchedCount === 0) {
@@ -74,10 +74,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method === "POST") {
 
-        const {event_title, event_from, date, approved} = req.body;
+        const {event_title, event_from, date_start, date_end, approved} = req.body;
 
         try {
-            const result = await db.insertOne({event_title, event_from, date, approved});
+            const result = await db.insertOne({event_title, event_from, date_start, date_end, approved});
 
             return res.status(200).json({ message: "Event added", data: result });
         } catch (error) {

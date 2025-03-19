@@ -17,7 +17,7 @@ export default function deleteButton({eventId}:any) {
         
         toast(data?.message)
 
-        mutate("/api/google");
+        mutate("/api/mongodb");
     };  
 
     return (

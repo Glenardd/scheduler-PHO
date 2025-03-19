@@ -2,7 +2,7 @@ import { usePathname } from "next/navigation";
 
 export default function checkRoot({children}:any) {
     
-    const paths = ["/"];
+    const paths = ["/", "/calendar"];
 
     const pathname = usePathname();
 

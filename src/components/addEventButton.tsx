@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { object, string } from 'yup';
+import { date, object, string } from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -11,7 +11,6 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-    DialogClose
 } from "@/components/ui/dialog";
 
 import {
@@ -53,7 +52,8 @@ export default function addEventButton() {
         title: string().required("Don't leave empty"),
         eventFrom: string().required("Please select"),
         approved: string().required("Please select from the choices"),
-        date: string().required("Select date please"),
+        date_start: string().required("Select starting date please"),
+        date_end: string().required("Select ending date please"),
     });
 
     const form = useForm({
@@ -62,7 +62,8 @@ export default function addEventButton() {
             title: "",
             eventFrom: "",
             approved: "",
-            date: "",
+            date_start: "",
+            date_end: "",
         },
     });
 
@@ -70,7 +71,8 @@ export default function addEventButton() {
 
         const newData = {
             approved: form.getValues().approved,
-            date: form.getValues().date,
+            date_start: form.getValues().date_start,
+            date_end: form.getValues().date_end,
             event_from: form.getValues().eventFrom,
             event_title: form.getValues().title,
         };
@@ -92,7 +94,7 @@ export default function addEventButton() {
 
         form.reset();
 
-        mutate("/api/google");
+        mutate("/api/mongodb");
     };
 
     const handleOpen = () => {
@@ -152,10 +154,10 @@ export default function addEventButton() {
                             }}
                         />
 
-                        {/* date */}
+                        {/* date start */}
                         <FormField
                             control={form.control}
-                            name="date"
+                            name="date_start"
                             render={({ field }) => {
                                 return (
                                     <FormItem>
@@ -164,7 +166,7 @@ export default function addEventButton() {
                                             <Popover>
                                                 <PopoverTrigger asChild>
                                                     <Button className="w-full" variant="outline">
-                                                        {!form.getValues().date ? "Date" : new Date(form.getValues().date).toLocaleDateString()}
+                                                        {!form.getValues().date_start ? "Date" : new Date(form.getValues().date_start).toLocaleDateString()}
                                                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>
@@ -178,7 +180,39 @@ export default function addEventButton() {
                                                 </PopoverContent>
                                             </Popover>
                                         </FormControl>
-                                        <FormMessage>{form.formState.errors.date?.message}</FormMessage>
+                                        <FormMessage>{form.formState.errors.date_start?.message}</FormMessage>
+                                    </FormItem>
+                                )
+                            }}
+                        />
+
+                        {/* date end */}
+                        <FormField
+                            control={form.control}
+                            name="date_end"
+                            render={({ field }) => {
+                                return (
+                                    <FormItem>
+                                        <FormLabel className="mt-4">Date</FormLabel>
+                                        <FormControl>
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button className="w-full" variant="outline">
+                                                        {!form.getValues().date_end ? "Date" : new Date(form.getValues().date_end).toLocaleDateString()}
+                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto p-0" align="end">
+                                                    <Calendar
+                                                        mode="single"
+                                                        initialFocus
+                                                        selected={new Date(field.value)}
+                                                        onSelect={field.onChange}
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                        </FormControl>
+                                        <FormMessage>{form.formState.errors.date_end?.message}</FormMessage>
                                     </FormItem>
                                 )
                             }}

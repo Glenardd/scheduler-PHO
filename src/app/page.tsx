@@ -1,8 +1,10 @@
+import EventsShow from "@/components/eventsShow";
+
 export default function Page() {
   return (
     <>
       <div>
-          show public events
+        <EventsShow />  
       </div>
     </>
   );
