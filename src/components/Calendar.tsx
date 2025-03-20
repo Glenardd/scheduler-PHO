@@ -5,6 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { useRef, useState, useEffect } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import useSWR from "swr";
+import { format } from "date-fns";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -15,12 +16,11 @@ const Calendar = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [popoverPosition, setPopoverPosition] = useState<{ top: number; left: number } | null>(null);
+  const [fetchedYears, setFetchedYears] = useState<Set<number>>(new Set());
 
   const { data } = useSWR("/api/google", fetcher);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  useEffect(() => setIsMounted(true), []);
 
   useEffect(() => {
     if (data) {
@@ -36,11 +36,43 @@ const Calendar = () => {
     }
   }, [data]);
 
-  // Handle event click and position the popover
+  const fetchHolidays = async (year: number) => {
+    if (fetchedYears.has(year)) return;
+
+    try {
+      const response = await fetch(`/api/holidays?year=${year}&lang=en`);
+      if (!response.ok) throw new Error(`Failed to fetch holidays: ${response.statusText}`);
+
+      const data = await response.json();
+
+      const holidayEvents = data.map((holiday: any) => ({
+        id: `holiday-${holiday.date}`,
+        title: holiday.name,
+        start: format(new Date(holiday.date), "yyyy-MM-dd"),
+        allDay: true,
+        color: "#ff0000",
+      }));
+
+      setEvents((prevEvents) => [...prevEvents, ...holidayEvents]);
+      setFetchedYears((prev) => new Set(prev).add(year));
+    } catch (error) {
+      console.error("Error fetching holidays:", error);
+    }
+  };
+
+  const handleDatesSet = (info: any) => {
+    const startYear = new Date(info.start).getFullYear();
+    const endYear = new Date(info.end).getFullYear();
+
+    for (let year = startYear; year <= endYear; year++) {
+      fetchHolidays(year);
+    }
+  };
+
   const handleEventClick = (info: any) => {
     const rect = info.jsEvent.target.getBoundingClientRect();
     const top = rect.top + window.scrollY + 30;
-    const left = rect.left + window.scrollX + rect.width / 2; // Center the popover
+    const left = rect.left + window.scrollX + rect.width / 2;
 
     if (selectedEvent?.id === info.event.id) {
       setSelectedEvent(null);
@@ -57,7 +89,6 @@ const Calendar = () => {
     }
   };
 
-  // Close popover when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
@@ -78,7 +109,7 @@ const Calendar = () => {
   if (!isMounted) return null;
 
   return (
-    <div className="w-full h-full overflow-auto ">
+    <div className="w-full h-full overflow-auto">
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin]}
@@ -86,11 +117,11 @@ const Calendar = () => {
         selectable
         events={events}
         eventClick={handleEventClick}
-        height="auto" // Adjusts dynamically to content
-  contentHeight={800} // Fixed height in pixels
+        datesSet={handleDatesSet}
+        height="auto"
+        contentHeight={800}
       />
 
-      {/* Event Details Popover */}
       {selectedEvent && popoverPosition && (
         <div
           ref={popoverRef}
