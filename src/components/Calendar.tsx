@@ -4,10 +4,10 @@ import FullCalendar from "@fullcalendar/react";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useRef, useState, useEffect } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import useSWR from "swr";
 import { format } from "date-fns";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY!;
+const CALENDAR_ID = process.env.NEXT_PUBLIC_CALENDAR_ID!;
 
 const Calendar = () => {
   const calendarRef = useRef(null);
@@ -18,39 +18,30 @@ const Calendar = () => {
   const [popoverPosition, setPopoverPosition] = useState<{ top: number; left: number } | null>(null);
   const [fetchedYears, setFetchedYears] = useState<Set<number>>(new Set());
 
-  const { data } = useSWR("/api/google", fetcher);
-
   useEffect(() => setIsMounted(true), []);
 
-  useEffect(() => {
-    if (data) {
-      setEvents(
-        data?.calendar?.items?.map((event: any) => ({
-          id: event.id,
-          title: event.summary,
-          start: event.start?.dateTime || event.start?.date,
-          end: event.end?.dateTime || event.end?.date,
-          description: event.description || "No description available",
-        })) || []
-      );
-    }
-  }, [data]);
-
+  // ✅ Fetch Philippine Holidays from Google Calendar API
   const fetchHolidays = async (year: number) => {
-    if (fetchedYears.has(year)) return;
+    if (fetchedYears.has(year)) return; // Prevent duplicate requests
 
     try {
-      const response = await fetch(`/api/holidays?year=${year}&lang=en`);
+      const timeMin = `${year}-01-01T00:00:00Z`;
+      const timeMax = `${year}-12-31T23:59:59Z`;
+
+      const response = await fetch(
+        `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${GOOGLE_API_KEY}&timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`
+      );
+
       if (!response.ok) throw new Error(`Failed to fetch holidays: ${response.statusText}`);
 
       const data = await response.json();
 
-      const holidayEvents = data.map((holiday: any) => ({
-        id: `holiday-${holiday.date}`,
-        title: holiday.name,
-        start: format(new Date(holiday.date), "yyyy-MM-dd"),
+      const holidayEvents = data.items.map((holiday: any) => ({
+        id: `holiday-${holiday.start.date}`,
+        title: holiday.summary,
+        start: format(new Date(holiday.start.date), "yyyy-MM-dd"),
         allDay: true,
-        color: "#ff0000",
+        color: "#ff0000", // Holidays in red
       }));
 
       setEvents((prevEvents) => [...prevEvents, ...holidayEvents]);
@@ -60,6 +51,7 @@ const Calendar = () => {
     }
   };
 
+  // ✅ Fetch Holidays when Calendar View Changes
   const handleDatesSet = (info: any) => {
     const startYear = new Date(info.start).getFullYear();
     const endYear = new Date(info.end).getFullYear();
@@ -69,6 +61,7 @@ const Calendar = () => {
     }
   };
 
+  // ✅ Handle Event Clicks (Show Popover)
   const handleEventClick = (info: any) => {
     const rect = info.jsEvent.target.getBoundingClientRect();
     const top = rect.top + window.scrollY + 30;
@@ -83,12 +76,13 @@ const Calendar = () => {
         title: info.event.title,
         start: info.event.start?.toISOString(),
         end: info.event.end?.toISOString(),
-        description: info.event.extendedProps.description,
+        description: info.event.extendedProps.description || "No description available",
       });
       setPopoverPosition({ top, left });
     }
   };
 
+  // ✅ Close Popover When Clicking Outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
@@ -116,12 +110,13 @@ const Calendar = () => {
         editable
         selectable
         events={events}
-        eventClick={handleEventClick}
-        datesSet={handleDatesSet}
+        eventClick={handleEventClick} // ✅ Show popover when event is clicked
+        datesSet={handleDatesSet} // ✅ Fetch holidays when view changes
         height="auto"
         contentHeight={800}
       />
 
+      {/* ✅ Popover for Event Details */}
       {selectedEvent && popoverPosition && (
         <div
           ref={popoverRef}
