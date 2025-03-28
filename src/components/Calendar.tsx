@@ -20,9 +20,8 @@ const Calendar = () => {
 
   useEffect(() => setIsMounted(true), []);
 
-  // ✅ Fetch Philippine Holidays from Google Calendar API
   const fetchHolidays = async (year: number) => {
-    if (fetchedYears.has(year)) return; // Prevent duplicate requests
+    if (fetchedYears.has(year)) return;
 
     try {
       const timeMin = `${year}-01-01T00:00:00Z`;
@@ -41,7 +40,7 @@ const Calendar = () => {
         title: holiday.summary,
         start: format(new Date(holiday.start.date), "yyyy-MM-dd"),
         allDay: true,
-        color: "#ff0000", // Holidays in red
+        color: "#ff0000",
       }));
 
       setEvents((prevEvents) => [...prevEvents, ...holidayEvents]);
@@ -51,7 +50,6 @@ const Calendar = () => {
     }
   };
 
-  // ✅ Fetch Holidays when Calendar View Changes
   const handleDatesSet = (info: any) => {
     const startYear = new Date(info.start).getFullYear();
     const endYear = new Date(info.end).getFullYear();
@@ -61,7 +59,6 @@ const Calendar = () => {
     }
   };
 
-  // ✅ Handle Event Clicks (Show Popover)
   const handleEventClick = (info: any) => {
     const rect = info.jsEvent.target.getBoundingClientRect();
     const top = rect.top + window.scrollY + 30;
@@ -82,7 +79,6 @@ const Calendar = () => {
     }
   };
 
-  // ✅ Close Popover When Clicking Outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
@@ -103,20 +99,21 @@ const Calendar = () => {
   if (!isMounted) return null;
 
   return (
-    <div className="w-full h-full overflow-auto">
+    <div className="w-full h-full overflow-auto p-2 sm:p-4">
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin]}
         editable
         selectable
         events={events}
-        eventClick={handleEventClick} // ✅ Show popover when event is clicked
-        datesSet={handleDatesSet} // ✅ Fetch holidays when view changes
+        eventClick={handleEventClick}
+        datesSet={handleDatesSet}
         height="auto"
         contentHeight={800}
+        initialView="dayGridMonth"
+        aspectRatio={1.35}
       />
 
-      {/* ✅ Popover for Event Details */}
       {selectedEvent && popoverPosition && (
         <div
           ref={popoverRef}
