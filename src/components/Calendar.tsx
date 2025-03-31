@@ -134,7 +134,7 @@ const Calendar = () => {
         height="auto"
         contentHeight={800}
         initialView="dayGridMonth"
-        aspectRatio={1.35}
+        aspectRatio={window.innerWidth < 768 ? 1 : 1.35}
       />
 
       {selectedEvent && popoverPosition && (
