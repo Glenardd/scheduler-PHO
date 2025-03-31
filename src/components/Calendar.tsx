@@ -61,8 +61,18 @@ const Calendar = () => {
 
   const handleEventClick = (info: any) => {
     const rect = info.jsEvent.target.getBoundingClientRect();
-    const top = rect.top + window.scrollY + 30;
-    const left = rect.left + window.scrollX + rect.width / 2;
+    let top = rect.top + window.scrollY + 30;
+    let left = rect.left + window.scrollX + rect.width / 2;
+
+    const popoverWidth = 260;
+    const popoverHeight = 120;
+
+    if (left + popoverWidth > window.innerWidth) {
+      left = window.innerWidth - popoverWidth - 20;
+    }
+    if (top + popoverHeight > window.innerHeight) {
+      top = rect.top + window.scrollY - popoverHeight - 30;
+    }
 
     if (selectedEvent?.id === info.event.id) {
       setSelectedEvent(null);
@@ -93,6 +103,19 @@ const Calendar = () => {
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectedEvent]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (selectedEvent) {
+        setPopoverPosition(null);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
     };
   }, [selectedEvent]);
 
