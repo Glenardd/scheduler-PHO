@@ -144,6 +144,7 @@ export default function addEventButton() {
                                             <SelectContent>
                                                 <SelectItem value='DOH'>DOH</SelectItem>
                                                 <SelectItem value='PHO'>PHO</SelectItem>
+                                                <SelectItem value='MHO'>MHO</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage>{form.formState.errors.eventFrom?.message}</FormMessage>

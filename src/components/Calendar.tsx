@@ -20,6 +20,7 @@ interface EventDetails {
   title: string;
   start: string;
   description?: string;
+  type?: "PHO" | "DOH" | "MHO";
 }
 
 const Calendar = () => {
@@ -70,6 +71,36 @@ const Calendar = () => {
         (holiday) => new Date(holiday.start).getMonth() === selectedMonth
       ) || [],
     [selectedYear, selectedMonth, holidaysByYear]
+  );
+
+  // Example mock: replace this with your real source of program events
+  const allProgramEvents: EventDetails[] = [
+    {
+      title: "DOH Health Fair",
+      start: `${selectedYear}-${selectedMonth + 1}-10`,
+      type: "DOH",
+    },
+    {
+      title: "PHO Training",
+      start: `${selectedYear}-${selectedMonth + 1}-15`,
+      type: "PHO",
+    },
+    {
+      title: "MHO Vaccination Drive",
+      start: `${selectedYear}-${selectedMonth + 1}-22`,
+      type: "MHO",
+    },
+  ];
+
+  const filteredEvents = useMemo(
+    () =>
+      allProgramEvents.filter(
+        (event) =>
+          event.type === selectedFilter &&
+          new Date(event.start).getFullYear() === selectedYear &&
+          new Date(event.start).getMonth() === selectedMonth
+      ),
+    [selectedYear, selectedMonth, selectedFilter]
   );
 
   const handleEventClick = useCallback((event: Holiday) => {
@@ -134,10 +165,11 @@ const Calendar = () => {
               </div>
             </div>
 
-            {/* Event Details Section */}
+            {/* Events and Holidays */}
             <div className="mt-6 flex gap-6">
+              {/* Program Events */}
               <div className="w-1/2 border-r pr-4">
-                <h3 className="text-lg font-semibold">Event Details</h3>
+                <h3 className="text-lg font-semibold">Program Events</h3>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Filter by:</label>
                 <select
                   value={selectedFilter}
@@ -149,24 +181,35 @@ const Calendar = () => {
                   <option value="MHO">MHO</option>
                 </select>
 
-                <div className="mt-2 text-gray-700">
-                  <p><strong>Title:</strong> {selectedEvent.title}</p>
-                  <p><strong>Date:</strong> {new Date(selectedEvent.start).toLocaleDateString("en-US")}</p>
-                  <p><strong>Description:</strong> {selectedEvent.description || "No description available."}</p>
-                </div>
+                <ul className="mt-2 text-gray-700 list-disc list-inside">
+                  {filteredEvents.length > 0 ? (
+                    filteredEvents.map((event, index) => (
+                      <li key={index}>
+                        {new Date(event.start).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                        })}
+                        : {event.title}
+                      </li>
+                    ))
+                  ) : (
+                    <li>No events found for this filter</li>
+                  )}
+                </ul>
               </div>
 
               {/* Holiday List Section */}
               <div className="w-1/2">
                 <h3 className="text-lg font-semibold">Holidays</h3>
                 {filteredHolidays.length > 0 ? (
-                  <ul className="pl-4 mt-2">
+                  <ul className="pl-4 mt-2 list-disc text-gray-700">
                     {filteredHolidays.map((holiday) => (
-                      <li key={holiday.id} className="text-gray-600">
+                      <li key={holiday.id}>
                         {new Date(holiday.start).toLocaleDateString("en-US", {
                           month: "long",
                           day: "numeric",
-                        })}: {holiday.title}
+                        })}
+                        : {holiday.title}
                       </li>
                     ))}
                   </ul>
