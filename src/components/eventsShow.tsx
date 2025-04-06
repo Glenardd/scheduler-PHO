@@ -58,6 +58,33 @@ const dateFormat = (time: any) => {
                 </Table>
             </div>
             <div className="w-[50%] rounded-md border">
+                <div className="m-4 text-lg font-bold">MHO</div>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Health Celebrations</TableHead>
+                            <TableHead>DAY/DATE</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {/* {
+                            events?.map((event: any) => {
+                                if(event.event_from !== 'DOH' || event.approved !== 'true'){
+                                    return null;
+                                };
+
+                                return (
+                                    <TableRow key={event._id}>
+                                        <TableCell>{event.event_title}</TableCell>
+                                        <TableCell>{dateFormat(event.date_start)} - {dateFormat(event.date_end)} </TableCell>
+                                    </TableRow>
+                                )
+                            })
+                        } */}
+                    </TableBody>
+                </Table>
+            </div>
+            <div className="w-[50%] rounded-md border">
                 <div className="m-4 text-lg font-bold">PHO</div>
                 <Table>
                     <TableHeader>
