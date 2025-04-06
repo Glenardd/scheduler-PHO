@@ -24,6 +24,7 @@ export default function adminShowEvents() {
 
   const [month, setMonth] = useState<string | undefined>(undefined);
   const [approved, setApprove] = useState<string | undefined>(undefined);
+  const [eventFrom, setEventFrom] = useState<string | undefined>(undefined);
 
   const { data } = useSWR("/api/mongodb", (url) => fetch(url, { method: "GET" }).then((res) => res.json()));
 
@@ -47,9 +48,10 @@ export default function adminShowEvents() {
   
   const filteredData = event?.filter((item: any) => {
     const itemMonth = !month || dateFormat(item.date_start).includes(month);
-    const isApproved = !approved || approved === item.approved;
+    const isApproved = !approved || approved === item.approved; 
+    const eventFrom_ = !eventFrom || eventFrom === item.event_from; 
 
-    return itemMonth && isApproved;
+    return itemMonth && isApproved && eventFrom_;
   }) || [];
 
   return (
@@ -57,7 +59,15 @@ export default function adminShowEvents() {
       <SignedIn>
         <div className="flex gap-4">
           <AddEventButton />
-          <ListFilterButton setApprove={setApprove} setMonth={setMonth} month_={month} approved={approved} />
+          <ListFilterButton 
+            setApprove={setApprove} 
+            setMonth={setMonth} 
+            setEventFrom={setEventFrom}
+            
+            month_={month} 
+            approved={approved} 
+            eventFrom={eventFrom}
+          />
         </div>
       </SignedIn>
       <Table>
