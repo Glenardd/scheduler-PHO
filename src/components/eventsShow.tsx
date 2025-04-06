@@ -67,9 +67,9 @@ const dateFormat = (time: any) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {/* {
+                        {
                             events?.map((event: any) => {
-                                if(event.event_from !== 'DOH' || event.approved !== 'true'){
+                                if(event.event_from !== 'MHO' || event.approved !== 'true'){
                                     return null;
                                 };
 
@@ -80,7 +80,7 @@ const dateFormat = (time: any) => {
                                     </TableRow>
                                 )
                             })
-                        } */}
+                        }
                     </TableBody>
                 </Table>
             </div>

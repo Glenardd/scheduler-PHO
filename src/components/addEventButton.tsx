@@ -144,6 +144,7 @@ export default function addEventButton() {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value='DOH'>DOH</SelectItem>
+                                                    <SelectItem value='MHO'>MHO</SelectItem>
                                                     <SelectItem value='PHO'>PHO</SelectItem>
                                                 </SelectContent>
                                             </Select>
