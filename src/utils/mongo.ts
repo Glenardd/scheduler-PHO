@@ -8,16 +8,16 @@ export async function getEventsCollection(): Promise<Collection> {
   // If we already have a collection, return it
   if (eventsCollection) {
     return eventsCollection;
-  }
+  };
   
   // Check for MongoDB URI
   if (!process.env.MONGODB_URI) {
     throw new Error("Please define the MONGODB_URI environment variable");
-  }
+  };
   
   const uri = process.env.MONGODB_URI;
   const dbName = 'pho_db';
-  const collectionName = "events";
+  const collectionNameEvents = "events";
   
   try {
     // Create a new client if we don't have one
@@ -30,15 +30,15 @@ export async function getEventsCollection(): Promise<Collection> {
       
       // Connect to the client
       await client.connect();
-    }
+    };
     
     // Get the collection
     const db = client.db(dbName);
-    eventsCollection = db.collection(collectionName);
+    eventsCollection = db.collection(collectionNameEvents);
     
     return eventsCollection;
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error);
     throw error;
-  }
-}
+  };
+};

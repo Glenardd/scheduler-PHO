@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, User2Icon} from "lucide-react";
 import User from "./user";
 import Logout from "../logout";
 
@@ -14,6 +14,8 @@ import {
   SidebarHeader
 } from "@/components/ui/sidebar"
 
+
+
 // Menu items.
 const items = [
   {
@@ -25,6 +27,11 @@ const items = [
     title: "Calendar",
     url: "/calendar",
     icon: Calendar,
+  },
+  {
+    title: "Admin",
+    url: "/admin",
+    icon: User2Icon
   },
 ]
 

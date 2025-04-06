@@ -1,5 +1,4 @@
 import User from './user'
-// import { SignOutButton } from '@clerk/nextjs';
 
 import SignOutButton from './signOutButton';
 import { useUser } from '@clerk/nextjs';

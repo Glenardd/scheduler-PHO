@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import PopoverUser from "./popoverUser";
-import CheckRoot from "../checkRoot";
+import CheckPath from "../checkPath";
 
 export default function navbar() {
     return (
@@ -33,20 +33,20 @@ export default function navbar() {
             </div>
             <div className="flex items-center flex-shrink-0 text-black mr-6">
                 <div className="hidden md:block">
-                    <CheckRoot>
+                    <CheckPath>
                         <SignedIn>
                             <PopoverUser />
                         </SignedIn>
-                    </CheckRoot>
+                    </CheckPath>
                 </div>
                 <div className="hidden md:block">
-                    <CheckRoot>
+                    <CheckPath>
                         <SignedOut>
                             <SignInButton>
                                 <Button>Sign In</Button>
                             </SignInButton>
                         </SignedOut>
-                    </CheckRoot>
+                    </CheckPath>
                 </div>
             </div>
         </nav>

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 
 import { useUser } from "@clerk/nextjs";
 
-import CheckRoot from "../checkRoot";
+import CheckPath from "../checkPath";
 
 export default function user() {
 
@@ -52,12 +52,12 @@ export default function user() {
                     <SidebarMenu>
                         <SidebarMenuItem>
                             {/* show image when user is signed in */}
-                            <CheckRoot>{avatar()}</CheckRoot>
+                            <CheckPath>{avatar()}</CheckPath>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SignedIn>
                 <SignedOut>
-                    <CheckRoot>{signInButton()}</CheckRoot>
+                    <CheckPath>{signInButton()}</CheckPath>
                 </SignedOut>
             </div>
         </>

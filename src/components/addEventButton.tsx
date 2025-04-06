@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { date, object, string } from 'yup';
+import { object, string } from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -19,7 +19,6 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-    SelectLabel
 } from "@/components/ui/select"
 
 import {
@@ -116,133 +115,133 @@ export default function addEventButton() {
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(handleAddEvent)}>
 
-                        {/* title */}
-                        <FormField
-                            control={form.control}
-                            name="title"
-                            render={({ field }) => {
-                                return (
-                                    <FormItem>
-                                        <FormLabel className="mt-4">Title</FormLabel>
-                                        <Input placeholder="Enter title" {...field} />
-                                        <FormMessage>{form.formState.errors.title?.message}</FormMessage>
-                                    </FormItem>
-                                );
-                            }}
-                        />
+                            {/* title */}
+                            <FormField
+                                control={form.control}
+                                name="title"
+                                render={({ field }) => {
+                                    return (
+                                        <FormItem>
+                                            <FormLabel className="mt-4">Title</FormLabel>
+                                            <Input placeholder="Enter title" {...field} />
+                                            <FormMessage>{form.formState.errors.title?.message}</FormMessage>
+                                        </FormItem>
+                                    );
+                                }}
+                            />
 
-                        {/* event from */}
-                        <FormField
-                            control={form.control}
-                            name="eventFrom"
-                            render={({ field }) => {
-                                return (
-                                    <FormItem>
-                                        <FormLabel className="mt-4">Event from</FormLabel>
-                                        <Select value={String(field.value)} onValueChange={(value) => field.onChange(value)}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value='DOH'>DOH</SelectItem>
-                                                <SelectItem value='PHO'>PHO</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage>{form.formState.errors.eventFrom?.message}</FormMessage>
-                                    </FormItem>
-                                );
-                            }}
-                        />
+                            {/* event from */}
+                            <FormField
+                                control={form.control}
+                                name="eventFrom"
+                                render={({ field }) => {
+                                    return (
+                                        <FormItem>
+                                            <FormLabel className="mt-4">Event from</FormLabel>
+                                            <Select value={String(field.value)} onValueChange={(value) => field.onChange(value)}>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value='DOH'>DOH</SelectItem>
+                                                    <SelectItem value='PHO'>PHO</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage>{form.formState.errors.eventFrom?.message}</FormMessage>
+                                        </FormItem>
+                                    );
+                                }}
+                            />
 
-                        {/* date start */}
-                        <FormField
-                            control={form.control}
-                            name="date_start"
-                            render={({ field }) => {
-                                return (
-                                    <FormItem>
-                                        <FormLabel className="mt-4">Date</FormLabel>
-                                        <FormControl>
-                                            <Popover>
-                                                <PopoverTrigger asChild>
-                                                    <Button className="w-full" variant="outline">
-                                                        {!form.getValues().date_start ? "Date" : new Date(form.getValues().date_start).toLocaleDateString()}
-                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto p-0" align="end">
-                                                    <Calendar
-                                                        mode="single"
-                                                        initialFocus
-                                                        selected={new Date(field.value)}
-                                                        onSelect={field.onChange}
-                                                    />
-                                                </PopoverContent>
-                                            </Popover>
-                                        </FormControl>
-                                        <FormMessage>{form.formState.errors.date_start?.message}</FormMessage>
-                                    </FormItem>
-                                )
-                            }}
-                        />
+                            {/* date start */}
+                            <FormField
+                                control={form.control}
+                                name="date_start"
+                                render={({ field }) => {
+                                    return (
+                                        <FormItem>
+                                            <FormLabel className="mt-4">Date</FormLabel>
+                                            <FormControl>
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button className="w-full" variant="outline">
+                                                            {!form.getValues().date_start ? "Date" : new Date(form.getValues().date_start).toLocaleDateString()}
+                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-auto p-0" align="end">
+                                                        <Calendar
+                                                            mode="single"
+                                                            initialFocus
+                                                            selected={new Date(field.value)}
+                                                            onSelect={field.onChange}
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
+                                            </FormControl>
+                                            <FormMessage>{form.formState.errors.date_start?.message}</FormMessage>
+                                        </FormItem>
+                                    )
+                                }}
+                            />
 
-                        {/* date end */}
-                        <FormField
-                            control={form.control}
-                            name="date_end"
-                            render={({ field }) => {
-                                return (
-                                    <FormItem>
-                                        <FormLabel className="mt-4">Date</FormLabel>
-                                        <FormControl>
-                                            <Popover>
-                                                <PopoverTrigger asChild>
-                                                    <Button className="w-full" variant="outline">
-                                                        {!form.getValues().date_end ? "Date" : new Date(form.getValues().date_end).toLocaleDateString()}
-                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto p-0" align="end">
-                                                    <Calendar
-                                                        mode="single"
-                                                        initialFocus
-                                                        selected={new Date(field.value)}
-                                                        onSelect={field.onChange}
-                                                    />
-                                                </PopoverContent>
-                                            </Popover>
-                                        </FormControl>
-                                        <FormMessage>{form.formState.errors.date_end?.message}</FormMessage>
-                                    </FormItem>
-                                )
-                            }}
-                        />
+                            {/* date end */}
+                            <FormField
+                                control={form.control}
+                                name="date_end"
+                                render={({ field }) => {
+                                    return (
+                                        <FormItem>
+                                            <FormLabel className="mt-4">Date</FormLabel>
+                                            <FormControl>
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button className="w-full" variant="outline">
+                                                            {!form.getValues().date_end ? "Date" : new Date(form.getValues().date_end).toLocaleDateString()}
+                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-auto p-0" align="end">
+                                                        <Calendar
+                                                            mode="single"
+                                                            initialFocus
+                                                            selected={new Date(field.value)}
+                                                            onSelect={field.onChange}
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
+                                            </FormControl>
+                                            <FormMessage>{form.formState.errors.date_end?.message}</FormMessage>
+                                        </FormItem>
+                                    )
+                                }}
+                            />
 
-                        {/* approved */}
-                        <FormField
-                            control={form.control}
-                            name="approved"
-                            render={({ field }) => {
-                                return (
-                                    <FormItem>
-                                        <FormLabel className="mt-4">Approved</FormLabel>
-                                        <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value='true'>True</SelectItem>
-                                                <SelectItem value='false'>False</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage>{form.formState.errors.approved?.message}</FormMessage>
-                                    </FormItem>
-                                )
-                            }}
-                        />
-                        <DialogFooter className="mt-4">
-                            <Button type="submit">Add</Button>
-                        </DialogFooter>
+                            {/* approved */}
+                            <FormField
+                                control={form.control}
+                                name="approved"
+                                render={({ field }) => {
+                                    return (
+                                        <FormItem>
+                                            <FormLabel className="mt-4">Approved</FormLabel>
+                                            <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value='true'>True</SelectItem>
+                                                    <SelectItem value='false'>False</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage>{form.formState.errors.approved?.message}</FormMessage>
+                                        </FormItem>
+                                    )
+                                }}
+                            />
+                            <DialogFooter className="mt-4">
+                                <Button type="submit">Add</Button>
+                            </DialogFooter>
                         </form>
                     </Form>
                 </DialogContent>

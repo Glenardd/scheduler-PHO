@@ -4,7 +4,7 @@ import {
     AvatarFallback
 } from "@/components/ui/avatar";
 
-import CheckRoot from "../checkRoot";
+import CheckPath from "../checkPath";
 import { useUser } from "@clerk/nextjs";
 
 export default function user() {
@@ -25,5 +25,5 @@ export default function user() {
         );
     };
 
-    return <CheckRoot>{avatar()}</CheckRoot>;
+    return <CheckPath>{avatar()}</CheckPath>;
 };

@@ -1,9 +1,7 @@
-import AdminShowEvents from "@/components/adminShowEvents";
+import AdminShowEvents from "@/components/adminShowEvents"
+import { SignedOut } from "@clerk/nextjs"
+import {SignedIn } from "@clerk/nextjs"
 
-export default function page() {
-  return (
-    <> 
-      <AdminShowEvents />
-    </>
-  );
+export default async function page() {
+  return  <AdminShowEvents />
 };

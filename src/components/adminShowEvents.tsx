@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import useSWR from "swr"
+import useSWR from "swr";
 
 import { SignedIn } from "@clerk/nextjs";
 
@@ -20,7 +20,7 @@ import ListFilterButton from "./listFilterButton";
 
 import { useState } from "react";
 
-export default function googleCalendarEvents() {
+export default function adminShowEvents() {
 
   const [month, setMonth] = useState<string | undefined>(undefined);
   const [approved, setApprove] = useState<string | undefined>(undefined);

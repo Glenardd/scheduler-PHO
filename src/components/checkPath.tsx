@@ -1,8 +1,8 @@
 import { usePathname } from "next/navigation";
 
-export default function checkRoot({children}:any) {
+export default function checkPath({children}:any) {
     
-    const paths = ["/", "/calendar"];
+    const paths = ["/", "/calendar", "/admin/login"];
 
     const pathname = usePathname();
 

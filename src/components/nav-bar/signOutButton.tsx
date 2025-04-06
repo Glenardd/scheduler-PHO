@@ -6,7 +6,7 @@ export default function signOutButton() {
     const { signOut } = useClerk();
 
     const handleSignOut = () =>{
-        signOut({redirectUrl: "/admin"});
+        signOut({redirectUrl: "/"});
     };
 
     return (
