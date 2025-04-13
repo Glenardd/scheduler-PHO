@@ -12,6 +12,7 @@ import {
 import useSWR from "swr";
 
 import { SignedIn } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 import DeleteButton from "./deleteButton";
 import EditButton from "./editButton";
@@ -34,6 +35,9 @@ export default function adminShowEvents() {
     return !isNaN(Date.parse(date));
   };
 
+  const { user } = useUser();
+  const roles = user?.publicMetadata?.roles;
+
   // date format
   const dateFormat = (time: any) => {
     if (!isValidDate(time)) return "Invalid date";
@@ -43,6 +47,7 @@ export default function adminShowEvents() {
   };
 
   // console.log(data?.calendar?.items);
+  console.log(roles)
 
   // event?.map((data:any)=> console.log(data?.organizer?.displayName))
   
@@ -91,10 +96,8 @@ export default function adminShowEvents() {
                   <TableCell>{dateFormat(event?.date_end)}</TableCell>
                   <TableCell>{event?.event_from}</TableCell>
                   <TableCell>{event?.approved}</TableCell>
-                  <SignedIn>
-                    <TableCell><EditButton eventId={eventId} /></TableCell>
-                    <TableCell><DeleteButton eventId={eventId} /></TableCell>
-                  </SignedIn>
+                  {roles === "admin" || roles === "super admin" ? <TableCell><EditButton eventId={eventId} /></TableCell> : ""}
+                  {roles === "super admin" && <TableCell><DeleteButton eventId={eventId} /></TableCell>}
                 </TableRow>
               );
             }).reverse()
