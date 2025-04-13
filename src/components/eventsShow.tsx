@@ -19,7 +19,7 @@ export default function eventsShow() {
 
     const events = data?.data;
 
-    console.log(events);
+    // console.log(events);
 
     // date format
 const dateFormat = (time: any) => {

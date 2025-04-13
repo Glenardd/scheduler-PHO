@@ -6,7 +6,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Button } from "./ui/button";
-import { set } from "date-fns";
 
 export default function listFilterButton({ setApprove, setMonth, setEventFrom, eventFrom, month_, approved }: any) {
 

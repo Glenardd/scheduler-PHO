@@ -30,9 +30,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const localization = {
+    signIn: {
+      start: {
+        title: "Admin",
+        titleCombined: "Admin page",
+        subtitle: "Use admin account to sign in",
+        subtitleCombined: "",
+        actionText: "",
+        actionLink: "",
+        actionLink__use_email: "",
+        actionLink__use_phone: "",
+        actionLink__join_waitlist: "",
+      },
+    },
+  };
   return (
     <html lang="en">
-      <ClerkProvider>
+      <ClerkProvider localization={localization}>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <SidebarProvider>
             <DisableSidebar/>

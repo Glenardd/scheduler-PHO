@@ -83,7 +83,6 @@ export default function adminShowEvents() {
         <TableBody>
           {
             filteredData?.map((event: any) => {
-
               const eventId = event?._id;
               return (
                 <TableRow key={eventId}>
