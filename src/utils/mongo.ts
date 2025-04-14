@@ -1,44 +1,46 @@
 import { Collection, MongoClient } from 'mongodb';
 
-// Global variables to maintain connection state
-let client: MongoClient | null = null;
-let eventsCollection: Collection | null = null;
+const uri = process.env.MONGODB_URI;
+const dbName = 'pho_db';
+const collectionName = "events";
+
+if (!uri) {
+  throw new Error("Please define the MONGODB_URI environment variable");
+}
+
+// Global is used in development to prevent multiple instances
+let cached: {
+  client: MongoClient | null;
+  collection: Collection | null;
+} = (global as any)._mongoCache || {
+  client: null,
+  collection: null,
+};
+(global as any)._mongoCache = cached;
+
+if (!cached) {
+  cached = {
+    client: null,
+    collection: null,
+  };
+  (global as any)._mongoCache = cached;
+}
 
 export async function getEventsCollection(): Promise<Collection> {
-  // If we already have a collection, return it
-  if (eventsCollection) {
-    return eventsCollection;
+  if (cached.collection) {
+    return cached.collection;
   }
-  
-  // Check for MongoDB URI
-  if (!process.env.MONGODB_URI) {
-    throw new Error("Please define the MONGODB_URI environment variable");
+
+  if (!cached.client) {
+    cached.client = new MongoClient(uri!, {
+      maxPoolSize: 10,
+      minPoolSize: 5,
+      maxIdleTimeMS: 30000
+    });
+    await cached.client.connect();
   }
-  
-  const uri = process.env.MONGODB_URI;
-  const dbName = 'pho_db';
-  const collectionName = "events";
-  
-  try {
-    // Create a new client if we don't have one
-    if (!client) {
-      client = new MongoClient(uri, {
-        maxPoolSize: 10,
-        minPoolSize: 5,
-        maxIdleTimeMS: 30000
-      });
-      
-      // Connect to the client
-      await client.connect();
-    }
-    
-    // Get the collection
-    const db = client.db(dbName);
-    eventsCollection = db.collection(collectionName);
-    
-    return eventsCollection;
-  } catch (error) {
-    console.error("Failed to connect to MongoDB:", error);
-    throw error;
-  }
+
+  const db = cached.client.db(dbName);
+  cached.collection = db.collection(collectionName);
+  return cached.collection;
 }

@@ -13,7 +13,7 @@ export default function navbar() {
             justify-between 
             flex-wrap 
             bg-white 
-            p-4 
+            p-4
             shadow-md
         ">
             <SidebarTrigger/>
@@ -22,7 +22,7 @@ export default function navbar() {
                 items-center 
                 flex-shrink-0 
                 text-black 
-                mr-6 
+                mr-6
                 gap-2 
                 justify-center
             ">

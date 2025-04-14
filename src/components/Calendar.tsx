@@ -14,13 +14,15 @@ interface Holiday {
   start: string;
   title: string;
   description?: string;
+  color?: string;
 }
 
 interface EventDetails {
   title: string;
   start: string;
   description?: string;
-  type?: "PHO" | "DOH" | "MHO";
+  type: "PHO" | "DOH" | "MHO";
+  color?: string;
 }
 
 const Calendar = () => {
@@ -56,6 +58,7 @@ const Calendar = () => {
         id: holiday.id || `holiday-${holiday.start.date}`,
         title: holiday.summary,
         start: format(new Date(holiday.start.date), "yyyy-MM-dd"),
+        color: "red",
       }));
 
       setHolidaysByYear((prev) => new Map(prev).set(year, holidayEvents));
@@ -73,24 +76,32 @@ const Calendar = () => {
     [selectedYear, selectedMonth, holidaysByYear]
   );
 
-  // Example mock: replace this with your real source of program events
-  const allProgramEvents: EventDetails[] = [
-    {
-      title: "DOH Health Fair",
-      start: `${selectedYear}-${selectedMonth + 1}-10`,
-      type: "DOH",
-    },
-    {
-      title: "PHO Training",
-      start: `${selectedYear}-${selectedMonth + 1}-15`,
-      type: "PHO",
-    },
-    {
-      title: "MHO Vaccination Drive",
-      start: `${selectedYear}-${selectedMonth + 1}-22`,
-      type: "MHO",
-    },
-  ];
+  const [allProgramEvents, setAllProgramEvents] = useState<EventDetails[]>([]);
+
+useEffect(() => {
+  const fetchEvents = async () => {
+    try {
+      // Simulating a fetch — replace with actual API endpoint
+      const response = await fetch(`/api/events?year=${selectedYear}`);
+      const data = await response.json();
+
+      const formattedEvents = data.map((event: any) => ({
+        ...event,
+        type: event.type as "PHO" | "DOH" | "MHO",
+        color:
+          event.type === "DOH" ? "green" :
+          event.type === "MHO" ? "purple" :
+          "blue",
+      }));
+
+      setAllProgramEvents(formattedEvents);
+    } catch (error) {
+      console.error("Failed to fetch events:", error);
+    }
+  };
+
+  fetchEvents();
+}, [selectedYear]);
 
   const filteredEvents = useMemo(
     () =>
@@ -100,8 +111,13 @@ const Calendar = () => {
           new Date(event.start).getFullYear() === selectedYear &&
           new Date(event.start).getMonth() === selectedMonth
       ),
-    [selectedYear, selectedMonth, selectedFilter]
+    [allProgramEvents, selectedYear, selectedMonth, selectedFilter]
   );
+  
+  const calendarEvents = useMemo(() => {
+    const holidays = holidaysByYear.get(selectedYear) || [];
+    return [...holidays, ...allProgramEvents];
+  }, [holidaysByYear, selectedYear, allProgramEvents]);
 
   const handleEventClick = useCallback((event: Holiday) => {
     setSelectedEvent(event);
@@ -118,7 +134,7 @@ const Calendar = () => {
         plugins={[dayGridPlugin, interactionPlugin]}
         editable
         selectable
-        events={holidaysByYear.get(selectedYear) || []}
+        events={calendarEvents}
         eventClick={(info) => {
           const event: Holiday = {
             id: info.event.id || "",
@@ -137,8 +153,19 @@ const Calendar = () => {
           <div className="bg-white shadow-lg rounded-lg p-6 w-[90%] md:w-[60%] lg:w-[50%] h-[80%] overflow-auto relative">
             <h2 className="text-xl font-bold text-center">Event Details</h2>
 
-            {/* Year and Month Selection */}
             <div className="mt-4 flex gap-4 justify-center">
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Filter by:</label>
+                <select
+                  value={selectedFilter}
+                  onChange={handleFilterChange}
+                  className="border p-2 rounded-md w-full mb-4"
+                >
+                  <option value="PHO">PHO</option>
+                  <option value="DOH">DOH</option>
+                  <option value="MHO">MHO</option>
+                </select>
+              </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Select Year:</label>
                 <input
@@ -165,22 +192,9 @@ const Calendar = () => {
               </div>
             </div>
 
-            {/* Events and Holidays */}
             <div className="mt-6 flex gap-6">
-              {/* Program Events */}
               <div className="w-1/2 border-r pr-4">
                 <h3 className="text-lg font-semibold">Program Events</h3>
-                <label className="block text-gray-700 text-sm font-bold mb-2">Filter by:</label>
-                <select
-                  value={selectedFilter}
-                  onChange={handleFilterChange}
-                  className="border p-2 rounded-md w-full mb-4"
-                >
-                  <option value="PHO">PHO</option>
-                  <option value="DOH">DOH</option>
-                  <option value="MHO">MHO</option>
-                </select>
-
                 <ul className="mt-2 text-gray-700 list-disc list-inside">
                   {filteredEvents.length > 0 ? (
                     filteredEvents.map((event, index) => (
@@ -198,7 +212,6 @@ const Calendar = () => {
                 </ul>
               </div>
 
-              {/* Holiday List Section */}
               <div className="w-1/2">
                 <h3 className="text-lg font-semibold">Holidays</h3>
                 {filteredHolidays.length > 0 ? (
@@ -219,7 +232,6 @@ const Calendar = () => {
               </div>
             </div>
 
-            {/* Close Button */}
             <div className="flex justify-end mt-6">
               <button
                 onClick={() => setSelectedEvent(null)}
