@@ -30,16 +30,16 @@ export default function Calendar() {
       };
 
     //program events
-    const programEvents = data?.data.map((event: any) => ({
-        id: event._id,
-        title: event.event_title,
-        start: event.date_start,
-        end: event.date_end,
-        color: getColorByType(event.event_from),
-        extendedProps: { type: "program_events", from: event.event_from},
-    })) || [];      
-
-    console.log(data?.data);
+    const programEvents = data?.data
+        .filter((event: any) => event.approved === "Yes")
+        .map((event: any) => ({
+            id: event._id,
+            title: event.event_title,
+            start: event.date_start,
+            end: event.date_end,
+            color: getColorByType(event.event_from),
+            extendedProps: { type: "program_events", from: event.event_from },
+        })) || [];
 
     //holidays
     const fetchHolidays = async (year: number) => {

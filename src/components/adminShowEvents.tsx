@@ -47,7 +47,6 @@ export default function adminShowEvents() {
   };
 
   // console.log(data?.calendar?.items);
-  console.log(roles)
 
   // event?.map((data:any)=> console.log(data?.organizer?.displayName))
   
