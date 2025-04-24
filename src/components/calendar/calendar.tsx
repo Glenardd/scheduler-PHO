@@ -8,13 +8,14 @@ import useSWR from "swr";
 import { format } from "date-fns";
 
 import CalendarDialogBox from "./calendarDialogBox";
+import { Label } from "../ui/label";
 
 export default function Calendar() {
     const [holidays, setHolidays] = useState<any[]>([]);
 
     //clicked selected items
     const [selectedDate, setSelectedDate] = useState<string | any>({});
-    
+
     const calendarRef = useRef<FullCalendar>(null);
 
     //fetch the events
@@ -23,11 +24,12 @@ export default function Calendar() {
     // get color by type
     const getColorByType = (type: string) => {
         switch (type) {
-          case 'PHO': return '#60a5fa';
-          case 'MHO': return '#a78bfa';
-          case 'DOH': return '#34d399';
+            case 'PHO': return '#60a5fa';
+            case 'MHO': return '#a78bfa';
+            case 'DOH': return '#34d399';
+            case 'Holiday': return '#f87171';
         };
-      };
+    };
 
     //program events
     const programEvents = data?.data
@@ -111,8 +113,8 @@ export default function Calendar() {
             const start = new Date(e.startStr);
             const end = new Date(e.endStr || e.startStr);
             return clickedDate >= start && clickedDate <= end;
-        })|| [];
-        
+        }) || [];
+
         setSelectedDate({
             date: format(clickedDate, "MMMM dd, yyyy"),
             events: matchedEvents,
@@ -130,6 +132,12 @@ export default function Calendar() {
     return (
         <>
             <div className="m-5">
+                <div className="flex justify-center gap-4 m-4">
+                    <Label>PHO</Label><Label style={{ backgroundColor: `${getColorByType("PHO")}`, width: "20px" }}></Label>
+                    <Label>MHO</Label><Label style={{ backgroundColor: `${getColorByType("MHO")}`, width: "20px" }}></Label>
+                    <Label>DOH</Label><Label style={{ backgroundColor: `${getColorByType("DOH")}`, width: "20px" }}></Label>
+                    <Label>Holiday</Label><Label style={{ backgroundColor: `${getColorByType("Holiday")}`, width: "20px" }}></Label>
+                </div>
                 <FullCalendar
                     ref={calendarRef}
                     plugins={[dayGridPlugin, interactionPlugin]}
