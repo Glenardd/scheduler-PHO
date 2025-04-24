@@ -37,6 +37,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import {format} from "date-fns";
+
 import { object, string } from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -93,11 +95,11 @@ export default function editButton({ eventId }: any) {
   const handleSubmit = async () => {
 
     const newData = {
-      "approved": `${form.getValues().approved}`,
-      "date_start": `${form.getValues().date_start}`,
-      "date_end": `${form.getValues().date_end}`,
-      "event_from": `${form.getValues().eventFrom}`,
-      "event_title": `${form.getValues().title}`,
+      approved: form.getValues().approved,
+      date_start: format(form.getValues().date_start, "yyyy-MM-dd"),
+      date_end: format(form.getValues().date_end, "yyyy-MM-dd"),
+      event_from: form.getValues().eventFrom,
+      event_title: form.getValues().title,
     };
 
     const response = await fetch(`/api/mongodb?id=${eventId}`,

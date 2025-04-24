@@ -36,6 +36,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 
+import {format} from "date-fns";
+
 import { toast } from "sonner";
 
 import { Calendar } from "./ui/calendar";
@@ -70,8 +72,8 @@ export default function addEventButton() {
 
         const newData = {
             approved: form.getValues().approved,
-            date_start: form.getValues().date_start,
-            date_end: form.getValues().date_end,
+            date_start: format(form.getValues().date_start, "yyyy-MM-dd"),
+            date_end: format(form.getValues().date_end, "yyyy-MM-dd"),
             event_from: form.getValues().eventFrom,
             event_title: form.getValues().title,
         };
