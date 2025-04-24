@@ -11,7 +11,8 @@ import {
 
 export default function popoverUser() {
 
-  const username = useUser().user?.fullName;
+  const username: string | any = useUser().user?.fullName;
+  const userRole: string | any = useUser().user?.publicMetadata?.roles;
 
   return (
     <Popover>
@@ -20,7 +21,7 @@ export default function popoverUser() {
         </PopoverTrigger>
         <PopoverContent className='w-50' align='start'>
           <div className='flex flex-col gap-3'>
-            <div className='text-m'>{username} (admin)</div>
+            <div className='text-m'>{username} {userRole ? `(${userRole})` : ''}</div>
             <div>
               <SignOutButton/>
             </div>

@@ -4,8 +4,12 @@ import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import PopoverUser from "./popoverUser";
 import CheckPath from "../checkPath";
+import {format} from "date-fns";
 
-export default function navbar() {
+export default function Navbar() {
+
+    const currentYear: string = new Date().getFullYear().toString();
+
     return (
         <nav className="
             w-full
@@ -28,7 +32,7 @@ export default function navbar() {
                 justify-center
             ">
                 <Image src="/PHO.png" width={50} height={50} alt="PHO-Logo" />
-                <span>Provincial Health Office 2025 Health Calendar</span>
+                <span>Provincial Health Office {currentYear} Health Calendar</span>
                 <Image src="/PGP.png" width={50} height={50} alt="PGP-Logo" />
             </div>
             <div className="flex items-center flex-shrink-0 text-black mr-6">

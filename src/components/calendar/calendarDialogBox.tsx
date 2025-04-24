@@ -12,12 +12,16 @@ import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 
 export default function calendarDialogBox({ events }: { events: string | any }) {
-    
+
     const [dialogOpen, setDialogOpen] = useState(false);
-    console.log(events);
+
+    const date = events.date;
+    const allEvent = events.events;
+
+    console.log(allEvent);
 
     useEffect(() => {
-        if (events && events.length > 0) {
+        if (allEvent && allEvent.length > 0) {
             setDialogOpen(true);
         };
     }, [events]);
@@ -26,11 +30,53 @@ export default function calendarDialogBox({ events }: { events: string | any }) 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogContent className="lg:max-w-[800px] sm:max-w-[425px] md: max-w-[800px]">
                 <DialogHeader>
-                    <DialogTitle>Events</DialogTitle>
+                    <DialogTitle>{String(date).toLocaleUpperCase()}</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you're done.
+                        Events for the selected date
                     </DialogDescription>
                 </DialogHeader>
+                <ul>
+                    <div className="font-bold">Program events</div>
+                    {
+                        allEvent?.map((event: string | any, index: number) => {
+                            if(event?.extendedProps.type === "program_events"){
+                                return (
+                                    <div key={index}>
+                                        <div className="flex flex-col gap-2 m-4">
+    
+                                            {/* title of the event */}
+                                            <li>
+                                                <div className="text-lg font-bold">{event.title}</div>
+                                                <div className="text-sm text-gray-500">{format(new Date(event.startStr), "MMMM dd, yyyy")} - {format(new Date(event.endStr), "MMMM dd, yyyy")}</div>
+                                            </li>
+                                        </div>
+                                    </div>
+                                );
+                            }
+                        })
+                    }
+                </ul>
+                <ul>
+                    <div className="font-bold">Holidays</div>
+                    {
+                        allEvent?.map((event: string | any, index: number) => {
+                            if(event?.extendedProps.type === "holiday"){
+                                return (
+                                    <div key={index}>
+                                        <div className="flex flex-col gap-2 m-4">
+    
+                                            {/* title of the event */}
+                                            <li>
+                                                <div className="text-lg font-bold">{event.title}</div>
+                                                <div className="text-sm text-gray-500">{format(new Date(event.startStr), "MMMM dd, yyyy")} - {format(new Date(event.endStr), "MMMM dd, yyyy")}</div>
+                                            </li>
+                                        </div>
+                                    </div>
+                                );
+                            }
+                        })
+                    }
+                </ul>
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button type="button">Close</Button>

@@ -233,8 +233,8 @@ export default function addEventButton() {
                                                     <SelectValue placeholder="Select" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value='true'>True</SelectItem>
-                                                    <SelectItem value='false'>False</SelectItem>
+                                                    <SelectItem value='Yes'>Yes</SelectItem>
+                                                    <SelectItem value='No'>No</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage>{form.formState.errors.approved?.message}</FormMessage>

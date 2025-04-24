@@ -42,7 +42,7 @@ const dateFormat = (time: any) => {
                     <TableBody>
                         {
                             events?.map((event: any) => {
-                                if(event.event_from !== 'DOH' || event.approved !== 'true'){
+                                if(event.event_from !== 'DOH' || event.approved !== 'Yes'){
                                     return null;
                                 };
 
@@ -69,7 +69,7 @@ const dateFormat = (time: any) => {
                     <TableBody>
                         {
                             events?.map((event: any) => {
-                                if(event.event_from !== 'MHO' || event.approved !== 'true'){
+                                if(event.event_from !== 'MHO' || event.approved !== 'Yes'){
                                     return null;
                                 };
 
@@ -96,7 +96,7 @@ const dateFormat = (time: any) => {
                     <TableBody>
                         {
                             events?.map((event: any) => {
-                                if(event.event_from !== 'PHO' || event.approved !== 'true'){
+                                if(event.event_from !== 'PHO' || event.approved !== 'Yes'){
                                     return null;
                                 };
 

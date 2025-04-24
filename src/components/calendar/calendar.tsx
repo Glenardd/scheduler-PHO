@@ -13,21 +13,33 @@ export default function Calendar() {
     const [holidays, setHolidays] = useState<any[]>([]);
 
     //clicked selected items
-    const [selectedDate, setSelectedDate] = useState<string | any>(null);
+    const [selectedDate, setSelectedDate] = useState<string | any>({});
     
     const calendarRef = useRef<FullCalendar>(null);
 
+    //fetch the events
     const { data } = useSWR("/api/mongodb", (url) => fetch(url, { method: "GET" }).then((res) => res.json()));
-    
+
+    // get color by type
+    const getColorByType = (type: string) => {
+        switch (type) {
+          case 'PHO': return '#60a5fa';
+          case 'MHO': return '#a78bfa';
+          case 'DOH': return '#34d399';
+        };
+      };
+
     //program events
     const programEvents = data?.data.map((event: any) => ({
         id: event._id,
         title: event.event_title,
         start: event.date_start,
         end: event.date_end,
-        color: "#3b82f6",
-        extendedProps: { type: "program_events" },
-    })) || [];   
+        color: getColorByType(event.event_from),
+        extendedProps: { type: "program_events", from: event.event_from},
+    })) || [];      
+
+    console.log(data?.data);
 
     //holidays
     const fetchHolidays = async (year: number) => {
@@ -101,7 +113,10 @@ export default function Calendar() {
             return clickedDate >= start && clickedDate <= end;
         })|| [];
         
-        setSelectedDate(matchedEvents);
+        setSelectedDate({
+            date: format(clickedDate, "MMMM dd, yyyy"),
+            events: matchedEvents,
+        });
     };
 
     //for updating the calendar
@@ -114,7 +129,7 @@ export default function Calendar() {
 
     return (
         <>
-            <div className="m-4">
+            <div className="m-5">
                 <FullCalendar
                     ref={calendarRef}
                     plugins={[dayGridPlugin, interactionPlugin]}

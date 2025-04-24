@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { useUser } from "@clerk/nextjs";
 import { Input } from "@/components/ui/input";
 
 import useSWR, { useSWRConfig } from "swr";
@@ -37,7 +38,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import {format} from "date-fns";
+import { format } from "date-fns";
 
 import { object, string } from 'yup';
 import { useForm } from "react-hook-form";
@@ -60,6 +61,8 @@ export default function editButton({ eventId }: any) {
   const date_end = event?.date_end;
   const approved = event?.approved;
   const eventFrom = event?.event_from;
+
+  const roles = useUser().user?.publicMetadata?.roles;
 
   let formSchema = object().shape({
     title: string().required("Don't leave empty"),
@@ -242,7 +245,8 @@ export default function editButton({ eventId }: any) {
               />
 
               {/* approved */}
-              <FormField
+              {/* super admin is the only one allowed to approve  */}
+              {roles === "super admin" && <FormField
                 control={form.control}
                 name="approved"
                 render={({ field }) => {
@@ -254,15 +258,16 @@ export default function editButton({ eventId }: any) {
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value='true'>True</SelectItem>
-                          <SelectItem value='false'>False</SelectItem>
+                          <SelectItem value='Yes'>Yes</SelectItem>
+                          <SelectItem value='No'>No</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage>{typeof form.formState.errors.approved?.message === 'string' ? form.formState.errors.approved.message : ''}</FormMessage>
                     </FormItem>
                   )
                 }}
-              />
+              />}
+              
 
               <DialogFooter className="mt-4">
                 <Button type='submit'>
