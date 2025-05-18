@@ -24,10 +24,10 @@ export default function Calendar() {
     // get color by type
     const getColorByType = (type: string) => {
         switch (type) {
-            case 'PHO': return '#60a5fa';
-            case 'MHO': return '#a78bfa';
-            case 'DOH': return '#34d399';
-            case 'Holiday': return '#f87171';
+            case 'PHO': return '#AEC6FF';
+            case 'MHO': return '#FDFD96';
+            case 'DOH': return '#77DD77';
+            case 'Holiday': return '#FF6961';
         };
     };
 
@@ -154,6 +154,7 @@ export default function Calendar() {
                     dateClick={handleClickDates}
                     height="auto"
                     contentHeight={800}
+                    eventTextColor="black"
                     initialView="dayGridMonth"
                 />
             </div>
