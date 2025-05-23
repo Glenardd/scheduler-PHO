@@ -1,6 +1,6 @@
 import {ObjectId } from "mongodb";
 
-import { getEventsCollection } from "@/utils/mongo";
+import { GetEventsCollection } from "@/utils/mongo";
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { id } = req.query;   
 
     const getCollectionEvent = async() => {
-        const collection = await getEventsCollection();
+        const collection = await GetEventsCollection();
         return collection;
     };
 

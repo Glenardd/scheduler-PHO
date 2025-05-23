@@ -4,7 +4,7 @@ import { Collection, MongoClient } from 'mongodb';
 let client: MongoClient | null = null;
 let eventsCollection: Collection | null = null;
 
-export async function getEventsCollection(): Promise<Collection> {
+export async function GetEventsCollection(): Promise<Collection> {
   // If we already have a collection, return it
   if (eventsCollection) {
     return eventsCollection;

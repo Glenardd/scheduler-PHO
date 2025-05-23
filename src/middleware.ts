@@ -6,10 +6,23 @@ const isPublicRoute = createRouteMatcher([
   '/calendar',
   '/admin/sign-in(.*)',
   '/api(.*)',
-  '/admin/calendar'
+  '/admin/calendar',
+  '/admin'
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+
+  const { userId } = await auth();
+
+  const isAdminRoot = req.nextUrl.pathname === '/admin';
+
+  if (isAdminRoot && userId) {
+    return NextResponse.redirect(new URL('/admin/calendar', req.url));
+  }
+
+  if (isAdminRoot && !userId) {
+    return NextResponse.redirect(new URL('/admin/sign-in', req.url));
+  }
 
   // Protect everything else unless explicitly public
   if (!isPublicRoute(req)) {

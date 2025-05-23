@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export default function popoverUser() {
+export default function PopoverUser() {
 
   const username: string | any = useUser().user?.fullName;
   const userRole: string | any = useUser().user?.publicMetadata?.roles;

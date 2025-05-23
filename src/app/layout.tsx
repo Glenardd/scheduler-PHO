@@ -5,7 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import DisableSidebar from "@/components/side-bar/disableSidebar";
 import DisableNavbar from "@/components/nav-bar/disableNavbar";
 
-import SidebarProvider from "@/components/side-bar/sidebarProvider";
+import SidebarProvider_ from "@/components/side-bar/sidebarProvider";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -45,14 +45,14 @@ export default function RootLayout({
     <html lang="en">
       <ClerkProvider localization={localization}>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <SidebarProvider>
+          <SidebarProvider_>
             <DisableSidebar />
             <main className="w-full">
               <DisableNavbar />
               {children}
             </main>
             <Toaster />
-          </SidebarProvider>
+          </SidebarProvider_>
         </body>
       </ClerkProvider>
     </html>

@@ -7,7 +7,7 @@ import {
 import CheckPath from "../checkPath";
 import { useUser } from "@clerk/nextjs";
 
-export default function user() {
+export default function User() {
 
     const user = useUser()?.user!!;
     const username = user?.fullName!!;

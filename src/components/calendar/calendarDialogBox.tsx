@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 
-export default function calendarDialogBox({ events }: { events: string | any }) {
+export default function CalendarDialogBox({ events }: { events: string | any }) {
 
     const [dialogOpen, setDialogOpen] = useState(false);
 

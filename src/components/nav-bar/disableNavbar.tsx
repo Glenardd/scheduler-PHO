@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./navbar";
 
-export default function disableNavbar() {
+export default function DisableNavbar() {
     const paths = ["/admin/sign-in", "/admin/login"];
   
     const pathname = usePathname();

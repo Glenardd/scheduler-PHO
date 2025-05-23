@@ -45,7 +45,7 @@ import { CalendarIcon } from "lucide-react";
 import { Input } from "./ui/input";
 import { useSWRConfig } from "swr";
 
-export default function addEventButton() {
+export default function AddEventButton() {
 
     const { mutate } = useSWRConfig();
 

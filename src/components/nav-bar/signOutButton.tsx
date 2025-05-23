@@ -1,7 +1,7 @@
 import { Button } from "../ui/button"
 import { useClerk } from "@clerk/nextjs"
 
-export default function signOutButton() {
+export default function SignOutButton() {
     
     const { signOut } = useClerk();
 

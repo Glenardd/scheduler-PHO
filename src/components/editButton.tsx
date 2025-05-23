@@ -49,7 +49,7 @@ import { CalendarIcon } from "lucide-react";
 import { toast } from 'sonner';
 import { useEffect } from 'react';
 
-export default function editButton({ eventId }: { eventId: number | string }) {
+export default function EditButton({ eventId }: { eventId: number | string }) {
 
   const { mutate } = useSWRConfig();
 
