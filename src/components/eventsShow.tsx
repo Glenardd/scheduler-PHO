@@ -22,11 +22,11 @@ export default function eventsShow() {
     // console.log(events);
 
     // date format
-const dateFormat = (time: any) => {
-    const timeShort = new Date(time);
-    const shortTime = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(timeShort);
-    return shortTime;
-};
+    const dateFormat = (time: any) => {
+        const timeShort = new Date(time);
+        const shortTime = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(timeShort);
+        return shortTime;
+    };
 
     return (
         <div className="flex justify-center gap-4 m-4">
@@ -42,7 +42,7 @@ const dateFormat = (time: any) => {
                     <TableBody>
                         {
                             events?.map((event: any) => {
-                                if(event.event_from !== 'DOH' || event.approved !== 'Yes'){
+                                if (event.event_from !== 'DOH' || event.approved !== 'Yes') {
                                     return null;
                                 };
 
@@ -69,7 +69,7 @@ const dateFormat = (time: any) => {
                     <TableBody>
                         {
                             events?.map((event: any) => {
-                                if(event.event_from !== 'MHO' || event.approved !== 'Yes'){
+                                if (event.event_from !== 'MHO' || event.approved !== 'Yes') {
                                     return null;
                                 };
 
@@ -96,7 +96,7 @@ const dateFormat = (time: any) => {
                     <TableBody>
                         {
                             events?.map((event: any) => {
-                                if(event.event_from !== 'PHO' || event.approved !== 'Yes'){
+                                if (event.event_from !== 'PHO' || event.approved !== 'Yes') {
                                     return null;
                                 };
 

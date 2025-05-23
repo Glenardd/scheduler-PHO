@@ -116,8 +116,6 @@ export default function editButton({ eventId }: any) {
 
     toast(response?.message);
 
-    console.log(form.getValues());
-
     mutate("/api/mongodb");
   };
 
@@ -267,7 +265,7 @@ export default function editButton({ eventId }: any) {
                   )
                 }}
               />}
-              
+
 
               <DialogFooter className="mt-4">
                 <Button type='submit'>
