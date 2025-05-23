@@ -59,7 +59,7 @@ export default function Calendar() {
         ?.filter((event) => event.approved === "Yes")
         .map((event) => ({
             id: event._id,
-            title: event.event_title,
+            title: event.event_title,   
             start: event.date_start,
             end: event.date_end,
             color: getColorByType(event.event_from) ?? "#000000",
