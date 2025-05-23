@@ -76,7 +76,7 @@ export default function AddEventButton() {
             date_end: format(form.getValues().date_end, "yyyy-MM-dd"),
             event_from: form.getValues().eventFrom,
             event_title: form.getValues().title,
-        };
+        }
 
         const response = await fetch("/api/mongodb",
             {
