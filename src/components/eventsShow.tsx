@@ -11,7 +11,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
-export default function eventsShow() {
+export default function EventsShow() {
 
     const { data } = useSWR("/api/mongodb", (url) => fetch(url, { method: "GET" }).then((res) => res.json()))
 
@@ -22,7 +22,7 @@ export default function eventsShow() {
     // console.log(events);
 
     // date format
-    const dateFormat = (time: any) => {
+    const dateFormat = (time: string | number | Date) => {
         const timeShort = new Date(time);
         const shortTime = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(timeShort);
         return shortTime;
@@ -41,7 +41,14 @@ export default function eventsShow() {
                     </TableHeader>
                     <TableBody>
                         {
-                            events?.map((event: any) => {
+                            events?.map((event: {
+                                _id: string;
+                                event_title: string;
+                                event_from: string;
+                                approved: string;
+                                date_start: string | number | Date;
+                                date_end: string | number | Date;
+                            }) => {
                                 if (event.event_from !== 'DOH' || event.approved !== 'Yes') {
                                     return null;
                                 };
@@ -68,7 +75,14 @@ export default function eventsShow() {
                     </TableHeader>
                     <TableBody>
                         {
-                            events?.map((event: any) => {
+                            events?.map((event: {
+                                _id: string;
+                                event_title: string;
+                                event_from: string;
+                                approved: string;
+                                date_start: string | number | Date;
+                                date_end: string | number | Date;
+                            }) => {
                                 if (event.event_from !== 'MHO' || event.approved !== 'Yes') {
                                     return null;
                                 };
@@ -95,7 +109,14 @@ export default function eventsShow() {
                     </TableHeader>
                     <TableBody>
                         {
-                            events?.map((event: any) => {
+                            events?.map((event: {
+                                _id: string;
+                                event_title: string;
+                                event_from: string;
+                                approved: string;
+                                date_start: string | number | Date;
+                                date_end: string | number | Date;
+                            }) => {
                                 if (event.event_from !== 'PHO' || event.approved !== 'Yes') {
                                     return null;
                                 };

@@ -49,11 +49,11 @@ import { CalendarIcon } from "lucide-react";
 import { toast } from 'sonner';
 import { useEffect } from 'react';
 
-export default function editButton({ eventId }: any) {
+export default function editButton({ eventId }: { eventId: number | string }) {
 
   const { mutate } = useSWRConfig();
 
-  const { data } = useSWR(`/api/mongodb?id=${eventId}`, (url) => fetch(url, { method: "GET" }).then((res) => res.json()));
+  const { data } = useSWR(`/api/mongodb?id=${eventId}`, (url: string) => fetch(url, { method: "GET" }).then((res) => res.json()));
 
   const event = data?.data[0];
   const title = event?.event_title;

@@ -4,7 +4,7 @@ import { Button } from "./ui/button"
 import { useSWRConfig } from "swr";
 import { toast } from "sonner";
 
-export default function deleteButton({eventId}:any) {
+export default function DeleteButton({ eventId }: { eventId: number | string }) {
 
     const {mutate} = useSWRConfig();
 

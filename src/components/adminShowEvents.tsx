@@ -21,7 +21,7 @@ import ListFilterButton from "./listFilterButton";
 
 import { useState } from "react";
 
-export default function adminShowEvents() {
+export default function AdminShowEvents() {
 
   const [month, setMonth] = useState<string | undefined>(undefined);
   const [approved, setApprove] = useState<string | undefined>(undefined);
@@ -31,7 +31,7 @@ export default function adminShowEvents() {
 
   const event = data?.data;
 
-  const isValidDate = (date: any) => {
+  const isValidDate = (date: string) => {
     return !isNaN(Date.parse(date));
   };
 
@@ -39,19 +39,27 @@ export default function adminShowEvents() {
   const roles = user?.publicMetadata?.roles;
 
   // date format
-  const dateFormat = (time: any) => {
-    if (!isValidDate(time)) return "Invalid date";
+  const dateFormat = (time: string | number | Date) => {
+    if (!isValidDate(String(time))) return "Invalid date";
     const timeShort = new Date(time);
     const shortTime = new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(timeShort);
     return shortTime;
   };
 
   // console.log(data?.calendar?.items);
-
-  // event?.map((data:any)=> console.log(data?.organizer?.displayName))
   
-  const filteredData = event?.filter((item: any) => {
-    const itemMonth = !month || dateFormat(item.date_start).includes(month);
+  type EventItem = {
+    _id: string;
+    event_title: string;
+    date_start: string;
+    date_end: string;
+    event_from: string;
+    approved: string;
+    [key: string]: any; // for any additional fields
+  };
+
+  const filteredData = (event as EventItem[] | undefined)?.filter((item: EventItem) => {
+    const itemMonth = !month || dateFormat(item?.date_start).includes(month);
     const isApproved = !approved || approved === item.approved; 
     const eventFrom_ = !eventFrom || eventFrom === item.event_from; 
 
@@ -86,7 +94,7 @@ export default function adminShowEvents() {
         </TableHeader>
         <TableBody>
           {
-            filteredData?.map((event: any) => {
+            filteredData?.map((event: EventItem) => {
               const eventId = event?._id;
               return (
                 <TableRow key={eventId}>

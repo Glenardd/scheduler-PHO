@@ -11,10 +11,17 @@ import CalendarDialogBox from "./calendarDialogBox";
 import { Label } from "../ui/label";
 
 export default function Calendar() {
-    const [holidays, setHolidays] = useState<any[]>([]);
+    const [holidays, setHolidays] = useState<Array<{
+        id: string;
+        title: string;
+        start: string;
+        end: string;
+        color: string;
+        extendedProps: { type: string };
+    }>>([]);
 
     //clicked selected items
-    const [selectedDate, setSelectedDate] = useState<string | any>({});
+    const [selectedDate, setSelectedDate] = useState<{ date?: string; events?: any[] }>({});
 
     const calendarRef = useRef<FullCalendar>(null);
 
@@ -32,14 +39,30 @@ export default function Calendar() {
     };
 
     //program events
-    const programEvents = data?.data
-        .filter((event: any) => event.approved === "Yes")
-        .map((event: any) => ({
+    type ProgramEvent = {
+        id: string;
+        title: string;
+        start: string;
+        end: string;
+        color: string;
+        extendedProps: { type: string; from: string };
+    };
+
+    const programEvents: ProgramEvent[] = (data?.data as Array<{
+        _id: string;
+        event_title: string;
+        date_start: string;
+        date_end: string;
+        event_from: string;
+        approved: string;
+    }> | undefined)
+        ?.filter((event) => event.approved === "Yes")
+        .map((event) => ({
             id: event._id,
             title: event.event_title,
             start: event.date_start,
             end: event.date_end,
-            color: getColorByType(event.event_from),
+            color: getColorByType(event.event_from) ?? "#000000",
             extendedProps: { type: "program_events", from: event.event_from },
         })) || [];
 
@@ -64,7 +87,21 @@ export default function Calendar() {
 
             // get information about the holiday
             // in json format
-            const holidays = data?.items?.map((event: any) => ({
+            type HolidayEvent = {
+                id: string;
+                title: string;
+                start: string;
+                end: string;
+                color: string;
+                extendedProps: { type: string };
+            };
+
+            const holidays: HolidayEvent[] = data?.items?.map((event: {
+                id: string;
+                summary: string;
+                start: { dateTime?: string; date?: string };
+                end: { dateTime?: string; date?: string };
+            }) => ({
                 id: event.id,
                 title: event.summary,
                 start: event.start.dateTime || event.start.date,

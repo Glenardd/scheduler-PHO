@@ -1,6 +1,6 @@
 import { usePathname } from "next/navigation";
 
-export default function checkPath({children}:any) {
+export default function checkPath({children}:{ children: React.ReactNode }) {
     
     const paths = ["/", "/calendar", "/admin/login"];
 

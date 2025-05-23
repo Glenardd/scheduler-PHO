@@ -7,7 +7,23 @@ import {
 } from "@/components/ui/select"
 import { Button } from "./ui/button";
 
-export default function listFilterButton({ setApprove, setMonth, setEventFrom, eventFrom, month_, approved }: any) {
+type ListFilterButtonProps = {
+  setApprove: (value: string | undefined) => void;
+  setMonth: (value: string | undefined) => void;
+  setEventFrom: (value: string | undefined) => void;
+  eventFrom?: string;
+  month_?: string;
+  approved?: string;
+};
+
+export default function listFilterButton({
+  setApprove,
+  setMonth,
+  setEventFrom,
+  eventFrom,
+  month_,
+  approved,
+}: ListFilterButtonProps) {
 
   const months = [
     "January", "February", "March", "April", "May", "June",
@@ -16,7 +32,7 @@ export default function listFilterButton({ setApprove, setMonth, setEventFrom, e
 
   const eventsFrom = ["DOH", "MHO", "PHO"]
 
-  const handleClearFilter = () =>{
+  const handleClearFilter = () => {
     setApprove(undefined);
     setMonth(undefined);
     setEventFrom(undefined);
@@ -24,7 +40,7 @@ export default function listFilterButton({ setApprove, setMonth, setEventFrom, e
 
   return (
     <div className="w-[40%] flex gap-4">
-      <Select value={month_ ||""} onValueChange={(val) => setMonth(val)}>
+      <Select value={month_ || ""} onValueChange={(val) => setMonth(val)}>
         <SelectTrigger>
           <SelectValue placeholder="Month" />
         </SelectTrigger>
@@ -41,8 +57,8 @@ export default function listFilterButton({ setApprove, setMonth, setEventFrom, e
           <SelectValue placeholder="Approved" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="true">true</SelectItem>
-          <SelectItem value="false">false</SelectItem>
+          <SelectItem value="Yes">Yes</SelectItem>
+          <SelectItem value="No">No</SelectItem>
         </SelectContent>
       </Select>
       <Select value={eventFrom || ""} onValueChange={(val) => setEventFrom(val)}>
