@@ -40,6 +40,8 @@ import {format} from "date-fns";
 
 import { toast } from "sonner";
 
+import { useUser } from "@clerk/nextjs";
+
 import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { Input } from "./ui/input";
@@ -56,6 +58,8 @@ export default function AddEventButton() {
         date_start: string().required("Select starting date please"),
         date_end: string().required("Select ending date please"),
     });
+
+    const roles = useUser().user?.publicMetadata?.roles;
 
     const form = useForm({
         resolver: yupResolver(formSchema),
@@ -221,7 +225,7 @@ export default function AddEventButton() {
                             />
 
                             {/* approved */}
-                            <FormField
+                           {roles === "super admin" && <FormField
                                 control={form.control}
                                 name="approved"
                                 render={({ field }) => {
@@ -241,7 +245,7 @@ export default function AddEventButton() {
                                         </FormItem>
                                     )
                                 }}
-                            />
+                            />}
                             <DialogFooter className="mt-4">
                                 <Button type="submit">Add</Button>
                             </DialogFooter>
